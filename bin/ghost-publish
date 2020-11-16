@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+#1) If site-update already running, kill it through lock file (kill -15 wait, check kill -9 wait)
+#2) Get lock
+#3) Backup ghost directory to S3 backup bucket
+#4) generate static site
+#5) Sync static site to S3 www bucket
+#6) Invalidate CloudFront
+
+source $(dirname $0)/../.env
+
+# Backup content images
+aws s3 sync --delete --no-follow-symlinks $GHOST_DIR/content/images $CMS_BUCKET_PREFIX/images
+
+echo "*** pulling down website"
+gssg --fail-on-error --domain https://${CMS_HOSTNAME} --url https://${WEB_HOSTNAME}  --dest $WEB_DIR 2>/dev/null
+echo "*** syncing to web site bucket"
+aws s3 sync --delete $WEB_DIR $WEB_BUCKET_PREFIX
+echo "*** invalidating cloudfront"
+aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths '/*'
+echo "*** all done publishing"

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../.env
+
+# Sync the big directories, images
+aws s3 sync --delete --no-follow-symlinks $GHOST_DIR/content/images $CMS_BUCKET_PREFIX/images
+
+BACKUP_LIST=$(ls -d ${GHOST_DIR} /etc/nginx/sites-*  /etc/nginx/snippets /etc/letsencrypt/archive /etc/letsencrypt/live )
+# perl when you need a mature and practical extraction tool
+BACKUP_LIST="$BACKUP_LIST $(perl -ne '!/#/ && /(\/.*\/(nginx|letsencrypt)\/[^\/]*)/ && print "$1\n"' /etc/nginx/sites-enabled/*  | sort -u)"
+
+sudo tar cvf $BACKUP_FILE --auto-compress --exclude logs --exclude versions --exclude images $BACKUP_LIST
+aws s3 cp $BACKUP_FILE $CMS_BUCKET_PREFIX
+
+VERSION=$(jq -r '."active-version"'  ${GHOST_DIR}/.ghost-cli)
+VERSION_BACKUP_FILENAME="version-${VERSION}.tbz2"
+if ! aws s3 ls $CMS_BUCKET_PREFIX/$VERSION_BACKUP_FILENAME || [[ "$1" == "all" ]]
+then
+  BACKUP_LIST="$BACKUP_LIST ${GHOST_DIR}/versions/${VERSION}"
+  tar cvf /var/www/$VERSION_BACKUP_FILENAME ${GHOST_DIR}/versions/${VERSION}
+  aws s3 cp /var/www/$VERSION_BACKUP_FILENAME $CMS_BUCKET_PREFIX/$VERSION_BACKUP_FILENAME
+fi
+
+echo "Backed Up:"
+for F in $BACKUP_LIST
+do
+  echo "  $F"
+done

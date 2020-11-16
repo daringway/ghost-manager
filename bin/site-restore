@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../.env
+
+aws s3 sync --delete --no-follow-symlinks $CMS_BUCKET_PREFIX/images $GHOST_DIR/content/images
+aws s3 cp $CMS_BUCKET_PREFIX/$BACKUP_FILENAME $BACKUP_FILE
+cd /
+tar xvf $BACKUP_FILE
+
+VERSION=$(jq -r '."active-version"'  ${GHOST_DIR}/.ghost-cli)
+VERSION_BACKUP_FILENAME="version-${VERSION}.tbz2"
+if [[ ! -d ${GHOST_DIR}/versions/${VERSION} ]]
+then
+  aws s3 cp  $CMS_BUCKET_PREFIX/$VERSION_BACKUP_FILENAME /var/www/$VERSION_BACKUP_FILENAME
+  (cd /; tar xvf /var/www/$VERSION_BACKUP_FILENAME)
+fi
+
+cd $GHOST_DIR
+ghost start
+sudo systemctl restart nginx
+
+#  TODO renew cert using ghost command

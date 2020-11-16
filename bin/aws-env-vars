@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+if [[ ! -z "$1" ]]
+then
+  ECHO_PREFIX=$1
+fi
+
+if [[ "${AWS_DEFAULT_REGION}" == "" ]]
+then
+  export AWS_DEFAULT_REGION=$(curl -s --connect-timeout 3 -s http://169.254.169.254/latest/dynamic/instance-identity/document/ | jq -r '.region')
+  echo $ECHO_PREFIX AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+fi
+
+INSTANCE_ID=${INSTANCE_ID:-$(ec2metadata --instance-id)}
+echo $ECHO_PREFIX INSTANCE_ID=$INSTANCE_ID
+
+# Show Instance Tags as variables
+echo ""
+echo "# ec2 tags"
+while read KEY VALUE
+  do
+    KEY=$(echo ${KEY} |  tr a-z-: A-Z__ )
+    echo $ECHO_PREFIX ${KEY}=\"${VALUE}\"
+    if [[ $KEY == "SSM_PREFIX" ]]
+    then
+      SSM_PREFIX=$VALUE
+    fi
+  done < <(aws ec2 describe-tags --filters "Name=resource-id,Values=${INSTANCE_ID}" --query 'Tags[*].[Key,Value]' --output text)
+
+echo ""
+echo "# SSM parameters $SSM_PREFIX"
+if [[ ! -z "$SSM_PREFIX" ]]
+then
+   while read KEY VALUE
+    do
+      KEY=$(basename ${KEY} |  tr a-z-: A-Z__ )
+      echo $ECHO_PREFIX ${KEY}=\"${VALUE}\"
+    done < <(aws ssm get-parameters-by-path --path $SSM_PREFIX --with-decryption --query 'Parameters[*].[Name,Value]' --output=text)
+fi
