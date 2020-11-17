@@ -28,9 +28,16 @@ npm install ghost-cli@latest -g
 # Setup firewall
 ufw allow 'Nginx Full'
 
+while ! aws sts get-caller-identity
+do
+  echo "Missing credentials, sleeping 15"
+  sleep 15
+done
+
 ######Download and install Ghost######
 mkdir -p /var/www/ghost $INSTALL_DIR $WEB_DIR $BACKUP_DIR
 git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
+$INSTALL_DIR/update.sh
 for DIR in $INSTALL_DIR/publisher $INSTALL_DIR/starter $INSTALL_DIR/stopper
 do
   (cd $DIR; npm install)
@@ -42,16 +49,9 @@ chmod 775 /var/www/ghost
 # TODO update hostname
 # TODO update nginx upload limit
 
-while ! aws sts get-caller-identity
-do
-  echo "Missing credentials, sleeping 15"
-  sleep 15
-done
+(cd $INSTALL_DIR; su ubuntu pm2 start ecosystem.config.js)
 
-$INSTALL_DIR/update.sh
 source $INSTALL_DIR/.env
-
-su ubuntu pm2 start $INSTALL_DIR/ecosystem.config.js
 
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 TTL=60
