@@ -26,6 +26,7 @@ sudo snap install --classic aws-cli
 
 # install ghost
 sudo npm install ghost-cli@latest -g
+sudo ghost setup linux-user systemd
 
 # Setup firewall
 sudo ufw allow 'Nginx Full'
