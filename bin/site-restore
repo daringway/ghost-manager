@@ -21,8 +21,9 @@ then
   (cd /; tar xvf ${BACKUP_DIR}/${VERSION_BACKUP_FILENAME})
 fi
 
+sudo systemctl restart nginx
+
 cd $GHOST_DIR
 ghost start
-sudo systemctl restart nginx
 
 #  TODO renew cert using ghost command

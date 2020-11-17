@@ -4,11 +4,14 @@ INSTALL_DIR=/var/www/ghost-serverless
 RELEASE_VERSION=main
 NODE_VERSION=14
 
+if [[ $(id -u) != "0" ]]
+then
+  echo "ERROR: must run as root"
+  exit 2
+fi
+
 mkdir -p $INSTALL_DIR
 git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
-
-$INSTALL_DIR/update.sh
-source $INSTALL_DIR/.env
 
 mkdir -p $WEB_DIR $BACKUP_DIR
 
@@ -41,13 +44,13 @@ sudo chmod 775 /var/www/ghost
 
 for DIR in publisher starter stopper
 do
-  (cd $DIR; npm install)
+  (cd $INSTALL_DIR/$DIR; npm install)
 done
 
-sudo npm install pm2@latest eslint ghost-static-site-generator -g
+npm install pm2@latest eslint ghost-static-site-generator -g
 pm2 startup systemd
 
-sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ubuntu --hp /home/ubuntu
+env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ubuntu --hp /home/ubuntu
 pm2 start ecosystem.config.js
 pm2 save
 
@@ -60,3 +63,15 @@ INSTALL_DIR/bin/site-restore
 
 # TODO run ghost install
 # TODO configure ghost for mailgun https://ghost.org/docs/concepts/config/#setup-an-email-sending-account
+
+while ! aws sts get-caller-identity
+do
+  echo "Missing credentials, sleeping 15"
+  sleep 15
+done
+
+su ubuntu source $INSTALL_DIR/.env
+source $INSTALL_DIR/.env
+
+IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
+aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":60,"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
