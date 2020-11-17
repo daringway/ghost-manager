@@ -22,6 +22,7 @@ then
 fi
 
 sudo systemctl restart nginx
+ghost setup linux-user systemd
 
 cd $GHOST_DIR
 ghost start

@@ -29,7 +29,6 @@ sudo snap install --classic aws-cli
 
 # install ghost
 sudo npm install ghost-cli@latest -g
-sudo ghost setup linux-user systemd
 
 # Setup firewall
 sudo ufw allow 'Nginx Full'
@@ -54,8 +53,6 @@ env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ubu
 pm2 start ecosystem.config.js
 pm2 save
 
-INSTALL_DIR/bin/site-restore
-
 #cd /var/www/ghost
 #ghost install local
 #ghost setup linux-user systemd
@@ -70,9 +67,11 @@ do
   sleep 15
 done
 
-su ubuntu $INSTALL_DIR/.env
+su ubuntu $INSTALL_DIR/update.sh
 source $INSTALL_DIR/.env
 
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 TTL=60
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":'$TTL',"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
+
+su ubuntu $INSTALL_DIR/bin/site-restore

@@ -9,7 +9,7 @@ BACKUP_LIST=$(ls -d ${GHOST_DIR} /etc/nginx/sites-*  /etc/nginx/snippets /etc/le
 # perl when you need a mature and practical extraction tool
 BACKUP_LIST="$BACKUP_LIST $(perl -ne '!/#/ && /(\/.*\/(nginx|letsencrypt)\/[^\/]*)/ && print "$1\n"' /etc/nginx/sites-enabled/*  | sort -u)"
 
-sudo tar cvf $BACKUP_FILE --auto-compress --exclude logs --exclude versions --exclude images $BACKUP_LIST
+sudo tar cvf $BACKUP_FILE --auto-compress --exclude logs --exclude versions --exclude images $BACKUP_LIST --exclude .ghostpid
 aws s3 cp $BACKUP_FILE $CMS_BUCKET_PREFIX
 
 VERSION=$(jq -r '."active-version"'  ${GHOST_DIR}/.ghost-cli)
