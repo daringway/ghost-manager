@@ -24,7 +24,7 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 #sudo apt-get upgrade
 
 curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo bash -
-sudo apt-get install -y ec2-instance-connect nodejs nginx yarn jq fish
+sudo apt-get install -y nodejs nginx yarn jq fish # ec2-instance-connect
 sudo snap install --classic aws-cli
 
 # install ghost
@@ -48,9 +48,7 @@ done
 
 npm install pm2@latest eslint ghost-static-site-generator -g
 
-pm2 startup systemd
-pm2 start $INSTALL_DIR/ecosystem.config.js
-pm2 save
+su - ubuntu pm2 start $INSTALL_DIR/ecosystem.config.js
 
 while ! aws sts get-caller-identity
 do

@@ -24,8 +24,5 @@ fi
 sudo systemctl restart nginx
 
 cd $GHOST_DIR
-ghost doctor
-ghost setup systemd migrate linux-user
+ghost setup --no-prompt
 ghost start
-
-#  TODO renew cert using ghost command
