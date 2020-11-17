@@ -8,7 +8,7 @@ var lockKey = "ghost_starting";
 
 var lastOutput = [];
 
-const sleepAmount = 15 * 1000
+const sleepAmount = 30 * 1000
 
 async function run(command, outputArr) {
   return new Promise((resolve, reject) => {
@@ -47,12 +47,15 @@ async function onRequest(req, res) {
   if ( req.url.startsWith('/ghost') ) {
     res.write(`
     <head><meta http-equiv="refresh" content="10"></head>
+    <body>
     Ghost CMS is starting ...
     
     `);
     for ( const line of lastOutput) {
       res.write(line);
+      res.write('<br>');
     }
+    res.write('</body>');
     res.end();
     //end the response
 
