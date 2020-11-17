@@ -47,19 +47,10 @@ do
 done
 
 npm install pm2@latest eslint ghost-static-site-generator -g
+
 pm2 startup systemd
-
-env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ubuntu --hp /home/ubuntu
-pm2 start ecosystem.config.js
+pm2 start $INSTALL_DIR/ecosystem.config.js
 pm2 save
-
-#cd /var/www/ghost
-#ghost install local
-#ghost setup linux-user systemd
-#sudo rm -r /var/www/ghost/config.development.json /var/www/ghost/content /var/www/ghost/current
-
-# TODO run ghost install
-# TODO configure ghost for mailgun https://ghost.org/docs/concepts/config/#setup-an-email-sending-account
 
 while ! aws sts get-caller-identity
 do
