@@ -2,6 +2,12 @@
 
 source $(dirname $0)/../.env
 
+if ! aws s3 ls $CMS_BUCKET_PREFIX/$BACKUP_FILENAME
+then
+  echo "No backup to restore"
+  exit 1
+fi
+
 aws s3 sync --delete --no-follow-symlinks $CMS_BUCKET_PREFIX/images $GHOST_DIR/content/images
 aws s3 cp $CMS_BUCKET_PREFIX/$BACKUP_FILENAME $BACKUP_FILE
 cd /

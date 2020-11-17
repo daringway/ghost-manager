@@ -32,21 +32,5 @@ LOG_DIR=${GHOST_DIR}/content/logs
 BACKUP_FILE=${BACKUP_DIR}/${BACKUP_FILENAME}
 " > .env
 
-mkdir -p $WEB_DIR $BACKUP_DIR
 
-# Install ghost publisher
-if ! npm list -g --depth=0 pm2 >/dev/null
-then
-  for DIR in publisher starter stopper
-  do
-    (cd $DIR; npm install)
-  done
-
-  sudo npm install pm2@latest eslint ghost-static-site-generator -g
-  pm2 startup systemd
-
-  sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ubuntu --hp /home/ubuntu
-  pm2 start ecosystem.config.js
-  pm2 save
-fi
 
