@@ -10,11 +10,6 @@ then
   exit 2
 fi
 
-mkdir -p $INSTALL_DIR
-git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
-
-mkdir -p $WEB_DIR $BACKUP_DIR
-
 # Add yarn repo
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
@@ -23,32 +18,25 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 #sudo apt-get update
 #sudo apt-get upgrade
 
-curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo bash -
+curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo ash -
 sudo apt-get install -y nodejs nginx yarn jq fish # ec2-instance-connect
 sudo snap install --classic aws-cli
 
-# install ghost
+sudo npm install pm2@latest eslint ghost-static-site-generator -g
 sudo npm install ghost-cli@latest -g
 
 # Setup firewall
 sudo ufw allow 'Nginx Full'
 
 ######Download and install Ghost######
-sudo mkdir -p /var/www/ghost
-sudo chown -R ubuntu:ubuntu /var/www /home/ubuntu
-sudo chmod 775 /var/www/ghost
+mkdir -p /var/www/ghost $INSTALL_DIR $WEB_DIR $BACKUP_DIR
+chown -R ubuntu:ubuntu /var/www /home/ubuntu $INSTALL_DIR
+chmod 775 /var/www/ghost
+
+git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
 
 # TODO update hostname
 # TODO update nginx upload limit
-
-for DIR in publisher starter stopper
-do
-  (cd $INSTALL_DIR/$DIR; npm install)
-done
-
-npm install pm2@latest eslint ghost-static-site-generator -g
-
-su - ubuntu pm2 start $INSTALL_DIR/ecosystem.config.js
 
 while ! aws sts get-caller-identity
 do
@@ -56,11 +44,18 @@ do
   sleep 15
 done
 
+$INSTALL_DIR/update.sh
+source $INSTALL_DIR/.env
+
+for DIR in $INSTALL_DIR/publisher $INSTALL_DIR/starter $INSTALL_DIR/stopper
+do
+  (cd $DIR; npm install)
+done
+
+pm2 start $INSTALL_DIR/ecosystem.config.js
+
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 TTL=60
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":'$TTL',"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
 
-su ubuntu $INSTALL_DIR/update.sh
-source $INSTALL_DIR/.env
-
-su ubuntu $INSTALL_DIR/bin/site-restore
+$INSTALL_DIR/bin/site-restore
