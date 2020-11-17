@@ -6,7 +6,7 @@ var AsyncLock = require('async-lock');
 var lock = new AsyncLock({timeout: 500});
 var lockKey = "ghost_starting";
 
-var lastOutput = undefined;
+var lastOutput = [];
 
 const sleepAmount = 15 * 1000
 
