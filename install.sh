@@ -49,7 +49,7 @@ chmod 775 /var/www/ghost
 # TODO update hostname
 # TODO update nginx upload limit
 
-(cd $INSTALL_DIR; su ubuntu pm2 start ecosystem.config.js)
+su ubuntu -c "cd $INSTALL_DIR; pm2 start ecosystem.config.js"
 
 source $INSTALL_DIR/.env
 
@@ -57,4 +57,4 @@ IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 TTL=60
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":'$TTL',"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
 
-su ubuntu $INSTALL_DIR/bin/site-restore
+su ubuntu -c $INSTALL_DIR/bin/site-restore
