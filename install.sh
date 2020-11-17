@@ -50,7 +50,7 @@ sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -
 pm2 start ecosystem.config.js
 pm2 save
 
-
+INSTALL_DIR/bin/site-restore
 
 #cd /var/www/ghost
 #ghost install local
