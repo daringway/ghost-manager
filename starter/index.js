@@ -52,8 +52,8 @@ async function onRequest(req, res) {
     
     `);
     for ( const line of lastOutput) {
-      res.write(line);
       res.write('<br>');
+      res.write(line);
     }
     res.write('</body>');
     res.end();

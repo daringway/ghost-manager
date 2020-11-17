@@ -23,6 +23,10 @@ fi
 
 sudo systemctl restart nginx
 
+sudo mkdir -p $GHOST_DIR/content/logs
+sudo chown -R ghost:ghost $GHOST_DIR/content/logs
+
+
 cd $GHOST_DIR
 ghost setup --no-prompt
 ghost start
