@@ -74,4 +74,5 @@ su ubuntu source $INSTALL_DIR/.env
 source $INSTALL_DIR/.env
 
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
-aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":60,"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
+TTL=60
+aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":'$TTL',"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
