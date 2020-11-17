@@ -70,7 +70,7 @@ do
   sleep 15
 done
 
-su ubuntu source $INSTALL_DIR/.env
+su ubuntu $INSTALL_DIR/.env
 source $INSTALL_DIR/.env
 
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
