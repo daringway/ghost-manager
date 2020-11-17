@@ -5,7 +5,7 @@ RELEASE_VERSION=main
 NODE_VERSION=14
 
 mkdir -p $INSTALL_DIR
-git clone --single-branch https://github.com/daringway/ghost-serverless?ref=master $INSTALL_DIR
+git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
 
 $INSTALL_DIR/update.sh
 source $INSTALL_DIR/.env
