@@ -15,7 +15,7 @@ async function run(command, outputArr) {
     console.log(`starting ${command}`)
     outputArr.length = 0;
     try {
-      let cmd = spawn(commond);
+      let cmd = spawn(command);
 
       cmd.on('exit', (code, signal) => {
         const mesg = `${command} exited ${code} : ${signal}`;
@@ -33,7 +33,7 @@ async function run(command, outputArr) {
       })
 
     } catch (err) {
-      const mesg = `ERROR ${commond}: failed ${err}`;
+      const mesg = `ERROR ${command}: failed ${err}`;
       outputArr.push(mesg)
       reject(err);
     }
