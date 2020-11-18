@@ -38,7 +38,6 @@ do
 done
 
 ######Download and install Ghost######
-mkdir -p /var/www/ghost $INSTALL_DIR $WEB_DIR $BACKUP_DIR
 git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
 $INSTALL_DIR/update.sh
 for DIR in $INSTALL_DIR/publisher $INSTALL_DIR/starter $INSTALL_DIR/stopper
@@ -46,6 +45,7 @@ do
   (cd $DIR; npm install)
 done
 
+mkdir -p /var/www/ghost $INSTALL_DIR $WEB_DIR $BACKUP_DIR
 chown -R ubuntu:ubuntu /var/www /home/ubuntu $INSTALL_DIR
 chmod 775 /var/www/ghost
 

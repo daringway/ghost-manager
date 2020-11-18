@@ -2,6 +2,8 @@
 
 source $(dirname $0)/../.env
 
+makedir -p $BACKUP_DIR
+
 if ! aws s3 ls $CMS_BUCKET_PREFIX/$BACKUP_FILENAME
 then
   echo "No backup to restore"

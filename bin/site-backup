@@ -2,10 +2,12 @@
 
 source $(dirname $0)/../.env
 
+mkdir -p $BACKUP_DIR
+
 # Sync the big directories, images
 aws s3 sync --delete --no-follow-symlinks $GHOST_DIR/content/images $CMS_BUCKET_PREFIX/images
 
-BACKUP_LIST=$(ls -d ${GHOST_DIR} /etc/nginx/sites-*  /etc/nginx/snippets /etc/letsencrypt/archive /etc/letsencrypt/live )
+BACKUP_LIST=$(ls -d ${GHOST_DIR} /etc/nginx/sites-*  /etc/nginx/snippets /etc/letsencrypt/archive /etc/letsencrypt/live 2>/dev/null )
 # perl when you need a mature and practical extraction tool
 BACKUP_LIST="$BACKUP_LIST $(perl -ne '!/#/ && /(\/.*\/(nginx|letsencrypt)\/[^\/]*)/ && print "$1\n"' /etc/nginx/sites-enabled/*  | sort -u)"
 
