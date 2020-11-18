@@ -21,8 +21,6 @@ then
   (cd /; tar xvf ${BACKUP_DIR}/${VERSION_BACKUP_FILENAME})
 fi
 
-sudo systemctl restart nginx
-
 cd $GHOST_DIR
 ghost setup --no-prompt
 ghost start
