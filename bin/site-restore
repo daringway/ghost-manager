@@ -27,3 +27,6 @@ sudo chown -R ghost:ghost $GHOST_DIR/content/logs
 cd $GHOST_DIR
 ghost setup --no-prompt
 ghost start
+
+# Start last to make sure that the starter doesn't start before the ghost site is installed
+sudo systemctl restart nginx
