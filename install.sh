@@ -48,6 +48,9 @@ apt-get install -y yarn fish nginx nodejs
 npm install pm2@latest eslint ghost-static-site-generator -g
 npm install ghost-cli@latest -g
 
+# change ubuntu to fish, yes really
+sudo chsh -s /usr/bin/fish ubuntu
+
 # Setup firewall
 ufw allow 'Nginx Full'
 

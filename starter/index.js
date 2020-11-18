@@ -44,7 +44,7 @@ async function onRequest(req, res) {
 
   res.writeHead(200, {'Content-Type': 'text/html'});
 
-  if ( req.url.startsWith('/ghost') ) {
+  if ( req.url.startsWith('/ghost') || req.url.endsWith('/edit/') ) {
     res.write(`
     <head><meta http-equiv="refresh" content="10"></head>
     <body>
