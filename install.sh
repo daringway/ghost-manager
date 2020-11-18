@@ -60,4 +60,6 @@ IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 TTL=60
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":'$TTL',"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
 
+hostname $CMS_HOSTNAME
+
 su ubuntu -c $INSTALL_DIR/bin/site-restore
