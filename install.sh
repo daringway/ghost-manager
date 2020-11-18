@@ -1,5 +1,8 @@
 #!/bin/bash -x
 
+# Install Guidelines from https://ghost.org/docs/install/ubuntu/
+# Leverages https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/
+
 INSTALL_DIR=/var/www/ghost-serverless
 RELEASE_VERSION=main
 NODE_VERSION=14

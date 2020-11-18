@@ -1,46 +1,66 @@
 
 var http = require('http');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const { spawn } = require('child_process');
 
 var AsyncLock = require('async-lock');
 var lock = new AsyncLock({timeout: 500});
 var lockKey = "ghost_starting";
 
-var sleepAmount = 15 * 1000
+var lastOutput = [];
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+const sleepAmount = 30 * 1000
 
-async function start() {
-  console.log('Starting Ghost Server');
-  // TODO env variables
-  try {
-    const {stdout, stderr} = await exec('./ghost-start', {cwd: './bin'});
-    await sleep(sleepAmount);
-    if (stderr) {
-      console.log(`error starting ghost: ${stderr}`)
+async function run(command, outputArr) {
+  return new Promise((resolve, reject) => {
+    console.log(`starting ${command}`)
+    outputArr.length = 0;
+    try {
+      let cmd = spawn(command);
+
+      cmd.on('exit', (code, signal) => {
+        const mesg = `${command} exited ${code} : ${signal}`;
+        outputArr.push(mesg);
+        console.log(mesg);
+        setTimeout(resolve, sleepAmount);
+      })
+
+      cmd.stdout.on('data', function (chunk) {
+        outputArr.push(chunk.toString());
+      })
+
+      cmd.stderr.on('data', function (chunk) {
+        outputArr.push(chunk.toString());
+      })
+
+    } catch (err) {
+      const mesg = `ERROR ${command}: failed ${err}`;
+      outputArr.push(mesg)
+      reject(err);
     }
-  } catch (err) {
-    console.log(`caught error trying to start ${err}`)
-  }
+  })
 }
 
-//create a server object:
-http.createServer(async function (req, res) {
+async function onRequest(req, res) {
 
   res.writeHead(200, {'Content-Type': 'text/html'});
 
   if ( req.url.startsWith('/ghost') ) {
     res.write(`
     <head><meta http-equiv="refresh" content="10"></head>
+    <body>
     Ghost CMS is starting ...
+    
     `);
-    res.end(); //end the response
+    for ( const line of lastOutput) {
+      res.write('<br>');
+      res.write(line);
+    }
+    res.write('</body>');
+    res.end();
+    //end the response
 
     try {
-      await lock.acquire(lockKey, start)
+      await lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} )
       console.log(`ghost started`)
     } catch (err) {
       console.log(`skipping start, already trying ${err}`);
@@ -52,4 +72,6 @@ http.createServer(async function (req, res) {
     res.end(); //end the response
   }
 
-}).listen(7777);
+}
+
+http.createServer(onRequest).listen(7777);

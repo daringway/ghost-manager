@@ -21,6 +21,9 @@ then
   (cd /; tar xvf ${BACKUP_DIR}/${VERSION_BACKUP_FILENAME})
 fi
 
+sudo mkdir -p $GHOST_DIR/content/logs
+sudo chown -R ghost:ghost $GHOST_DIR/content/logs
+
 cd $GHOST_DIR
 ghost setup --no-prompt
 ghost start
