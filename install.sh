@@ -20,10 +20,18 @@ echo "ghost-serverless ts 0: starting"
 apt-get install -y jq
 snap install --classic aws-cli
 
-echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): core packages installed"
-
 ###### Download ghost serverless ######
 git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
+
+echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): core packages installed"
+
+while ! aws sts get-caller-identity
+do
+  echo "Missing IAM Role or not attached , sleeping 15"
+  sleep 15
+done
+
+echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): AWS creds verified"
 
 # Setup the .env
 $INSTALL_DIR/update.sh
@@ -31,13 +39,6 @@ source $INSTALL_DIR/.env
 
 hostname $( echo $CMS_HOSTNAME | tr . - )
 
-
-
-while ! aws sts get-caller-identity
-do
-  echo "Missing IAM Role or not attached , sleeping 15"
-  sleep 15
-done
 
 # Want to setup the DNS record early so DNS has time to update
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
