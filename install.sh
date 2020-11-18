@@ -13,8 +13,14 @@ then
   exit 2
 fi
 
+START_TS=$(date +%s)
+
+echo "ghost-serverless ts 0: starting"
+
 apt-get install -y jq
 snap install --classic aws-cli
+
+echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): core packages installed"
 
 ###### Download ghost serverless ######
 git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
@@ -24,6 +30,8 @@ $INSTALL_DIR/update.sh
 source $INSTALL_DIR/.env
 
 hostname $( echo $CMS_HOSTNAME | tr . - )
+
+
 
 while ! aws sts get-caller-identity
 do
@@ -35,6 +43,9 @@ done
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 TTL=120 # We set to 2 minutes because it takes that long for the rest of the setup
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":'$TTL',"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
+
+echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): DNS updated"
+
 
 # Install rest of needed software packages
 
@@ -48,6 +59,8 @@ apt-get install -y yarn fish nginx nodejs
 npm install pm2@latest eslint ghost-static-site-generator -g
 npm install ghost-cli@latest -g
 
+echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): all packages installed"
+
 # change ubuntu to fish, yes really
 sudo chsh -s /usr/bin/fish ubuntu
 
@@ -59,6 +72,9 @@ do
   (cd $DIR; npm install)
 done
 
+echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): ghost-serverless npm packages installed"
+
+
 mkdir -p /var/www/ghost $INSTALL_DIR $WEB_DIR $BACKUP_DIR
 chown -R ubuntu:ubuntu /var/www /home/ubuntu $INSTALL_DIR
 chmod 775 /var/www/ghost
@@ -68,8 +84,16 @@ chmod 775 /var/www/ghost
 # Wrap this in a webserver so you can see the status from the browser (Or at least give steps and not full logs)
 su ubuntu -c $INSTALL_DIR/bin/site-restore
 
+echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): ghost site restored"
+
+
 # Setup temp nginx to status service
 # 1st restore site (not version)
 
 # Setup ghost-serverless services
 su ubuntu -c "cd $INSTALL_DIR; pm2 start ecosystem.config.js"
+
+echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): ghost-serverless started"
+echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): done"
+
+
