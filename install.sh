@@ -17,6 +17,9 @@ START_TS=$(date +%s)
 
 echo "ghost-serverless ts 0: starting"
 
+# Add Repos
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 apt-get install -y jq
 snap install --classic aws-cli
 
@@ -49,12 +52,6 @@ echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): DNS updated"
 
 
 # Install rest of needed software packages
-
-# Add Repos
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
-# Install Package
 curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
 apt-get install -y yarn fish nginx nodejs
 npm install pm2@latest eslint ghost-static-site-generator -g
