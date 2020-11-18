@@ -18,7 +18,12 @@ You have to manually setup your ghost server.
    # cd /var/www/ghost
    # ghost install 
     ```
-1) Setup mail so ghost can email you account information.  You are on your own for now, good luck.  
+1) Setup mail so ghost can email you account information.  You are on your own for now, good luck. 
+1) Restart ghost to make sure it comes
+    ```shell script
+    # cd /var/www/ghost
+    # ghost restart
+    ``` 
 1) Edit your -ssl.conf nginx file that exists in the /etc/nginx/sites-enabled below by adding the upstream stream and updating the proxy_pass
     ```
     upstream backend {
