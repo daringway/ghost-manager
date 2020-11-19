@@ -23,7 +23,10 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.lis
 apt-get update
 
 snap install --classic aws-cli
-apt-get install -y jq
+apt-get install -y jq fish
+
+# change ubuntu to fish, yes really
+sudo chsh -s /usr/bin/fish ubuntu
 
 ###### Download ghost serverless ######
 git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
@@ -53,13 +56,10 @@ echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): DNS updated"
 
 # Install rest of needed software packages
 curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
-apt-get install -y yarn fish nginx nodejs
+apt-get install -y yarn  nginx nodejs
 npm install ghost-cli@latest pm2@latest eslint ghost-static-site-generator -g
 
 echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): all packages installed"
-
-# change ubuntu to fish, yes really
-sudo chsh -s /usr/bin/fish ubuntu
 
 # Setup firewall
 ufw allow 'Nginx Full'
