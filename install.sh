@@ -90,5 +90,3 @@ su ubuntu -c "cd $INSTALL_DIR; pm2 start ecosystem.config.js"
 
 echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): ghost-serverless started"
 echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): done"
-
-

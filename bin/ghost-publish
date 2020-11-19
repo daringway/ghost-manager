@@ -12,10 +12,19 @@ source $(dirname $0)/../.env
 # Backup content images
 aws s3 sync --delete --no-follow-symlinks $GHOST_DIR/content/images $CMS_BUCKET_PREFIX/images
 
+
+
 echo "*** pulling down website"
 gssg --domain https://${CMS_HOSTNAME} --url https://${WEB_HOSTNAME}  --dest $WEB_DIR 2>/dev/null
 echo "*** syncing to web site bucket"
 aws s3 sync --delete $WEB_DIR $WEB_BUCKET_PREFIX
 echo "*** invalidating cloudfront"
+
+# Upload public files
+for DIR in $(find $GHOST_DIR/content -name public_files)
+do
+  aws s3 sync $DIR $WEB_BUCKET_CMS_BUCKET_PREFIX/files
+done
+
 aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths '/*'
 echo "*** all done publishing"
