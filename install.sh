@@ -20,8 +20,12 @@ echo "ghost-serverless ts 0: starting"
 # Add Repos
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-apt-get install -y jq
+
 snap install --classic aws-cli
+if ! apt-get install -y jq
+then
+  snap install jq
+fi
 
 ###### Download ghost serverless ######
 git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
@@ -42,7 +46,6 @@ source $INSTALL_DIR/.env
 
 hostname $( echo $CMS_HOSTNAME | tr . - )
 
-
 # Want to setup the DNS record early so DNS has time to update
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 TTL=120 # We set to 2 minutes because it takes that long for the rest of the setup
@@ -50,12 +53,10 @@ aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch
 
 echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): DNS updated"
 
-
 # Install rest of needed software packages
 curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
 apt-get install -y yarn fish nginx nodejs
-npm install pm2@latest eslint ghost-static-site-generator -g
-npm install ghost-cli@latest -g
+npm install ghost-cli@latest pm2@latest eslint ghost-static-site-generator -g
 
 echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): all packages installed"
 
@@ -71,7 +72,6 @@ do
 done
 
 echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): ghost-serverless npm packages installed"
-
 
 mkdir -p /var/www/ghost $INSTALL_DIR $WEB_DIR $BACKUP_DIR
 chown -R ubuntu:ubuntu /var/www /home/ubuntu $INSTALL_DIR
