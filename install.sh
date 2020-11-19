@@ -20,12 +20,10 @@ echo "ghost-serverless ts 0: starting"
 # Add Repos
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+apt-get update
 
 snap install --classic aws-cli
-if ! apt-get install -y jq
-then
-  snap install jq
-fi
+apt-get install -y jq
 
 ###### Download ghost serverless ######
 git clone --single-branch https://github.com/daringway/ghost-serverless $INSTALL_DIR
@@ -83,7 +81,6 @@ chmod 775 /var/www/ghost
 su ubuntu -c $INSTALL_DIR/bin/site-restore
 
 echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): ghost site restored"
-
 
 # Setup temp nginx to status service
 # 1st restore site (not version)
