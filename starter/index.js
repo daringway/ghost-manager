@@ -42,13 +42,21 @@ async function run(command, outputArr) {
 
 async function onRequest(req, res) {
 
-  res.writeHead(200, {'Content-Type': 'text/html'});
+  // 503 is Temporary Suspended
+  res.writeHead(503, "503 Temporary Suspended", {'Content-Type': 'text/html'});
 
   if ( req.url.startsWith('/ghost') || req.url.endsWith('/edit/') ) {
-    res.write(`
+    res.write(`x
     <head><meta http-equiv="refresh" content="10"></head>
     <body>
-    Ghost CMS is starting ...
+    <h1>Ghost CMS is starting ...<h1>
+    
+    <h2>The page you are trying to reach will load once the service has been restored. You don't need to do anything. 
+     No page reload, nothing.</h2>
+    <h2>As it can take several minutes to wake the service from it's sleeping slumber now would be a good time to take a break.
+    A few options for you include:
+    head to the bathroom, get some coffee, grab a beer, or call that loved one that you haven't talked in a while. 
+    </h2>
     
     `);
     for ( const line of lastOutput) {
@@ -67,7 +75,7 @@ async function onRequest(req, res) {
     }
   } else {
     res.write(`
-      To auto start the Ghost CMS, use the admin url (hint hint, make sure the path starts with /ghost
+      <h2>To auto start the Ghost CMS, use the admin url (hint hint, make sure the path starts with /ghost</h2>
     `);
     res.end(); //end the response
   }
