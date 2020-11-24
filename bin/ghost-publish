@@ -26,7 +26,7 @@ if [ "$GHOST_API_KEY" != "" ]
 then
   mkdir -p $WEB_DIR/files
   echo "download posts for ghostHunter"
-  curl "https://${CMS_HOSTNAME}/ghost/api/v2/content/posts/?key=${GHOST_API_KEY}&limit=all&include=tags" |
+  curl "https://${CMS_HOSTNAME}/ghost/api/v2/content/posts/?key=${GHOST_API_KEY}&limit=all&include=tags&formats=plaintext" |
     perl -pe "s/${CMS_HOSTNAME}/${WEB_HOSTNAME}/g" > $WEB_DIR/files/posts.json
   echo '{"latestPost": "'$(date  --iso-8601=seconds)'"}' > $WEB_DIR/files/posts.latest.json
 fi
