@@ -12,9 +12,16 @@ source $(dirname $0)/../.env
 # Backup content images
 aws s3 sync --delete --no-follow-symlinks --no-progress $GHOST_DIR/content/images $CMS_BUCKET_PREFIX/images
 
+if ! (cd $GHOST_DIR; ghost status | grep running >/dev/null)
+then
+  echo "ERROR: aborting ghost  stopped"
+  exit
+fi
+
 echo "*** pulling down website"
 gssg --domain https://${CMS_HOSTNAME} --url https://${WEB_HOSTNAME}  --dest $WEB_DIR
 
+# TODO move this into gssg
 if [ "$GHOST_API_KEY" != "" ]
 then
   mkdir -p $WEB_DIR/files

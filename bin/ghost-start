@@ -3,4 +3,6 @@
 source $(dirname $0)/../.env
 
 cd $GHOST_DIR
+sudo find ./ ! -path "./versions/*" -type f -exec chmod 664 {} \;
+
 ghost start
