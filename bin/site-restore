@@ -25,6 +25,7 @@ fi
 
 sudo mkdir -p $GHOST_DIR/content/logs
 sudo chown -R ghost:ghost $GHOST_DIR/content/logs
+sudo find $GHOST_DIR/ ! -path "./versions/*" -type f -exec chmod 664 {} \;
 
 cd $GHOST_DIR
 ghost setup --no-prompt
