@@ -20,7 +20,7 @@ then
   mkdir -p $WEB_DIR/files
   echo "download posts for ghostHunter"
   curl "https://${CMS_HOSTNAME}/ghost/api/v2/content/posts/?key=${GHOST_API_KEY}&limit=all&include=tags" |
-    perl -pe "s/${CMS_HOSTNAME}/${WEB_HOSTNAME}/" > $WEB_DIR/files/posts.json
+    perl -pe "s/${CMS_HOSTNAME}/${WEB_HOSTNAME}/g" > $WEB_DIR/files/posts.json
   last=$(jq -r '.posts | sort_by(.updated_at) | reverse | limit(1;.[]) | .updated_at' $WEB_DIR/files/posts.json)
   echo '{"latestPost": "'$last'"}' > $WEB_DIR/files/posts.latest.json
 fi
