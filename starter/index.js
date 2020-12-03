@@ -60,6 +60,7 @@ async function onRequest(req, res) {
       <div class="frc-captcha" data-sitekey="FCMQG79GF422P165"></div>
     </form>
     
+    </body>
     `);
 
 
