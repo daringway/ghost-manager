@@ -76,6 +76,10 @@ async function onRequest(req, res) {
   } else {
     res.write(`
       <h2>To auto start the Ghost CMS, use the admin url (hint hint, make sure the path starts with /ghost</h2>
+      <script type="module" src="https://unpkg.com/friendly-challenge@0.6.1/widget.module.min.js" async defer></script>
+      <script nomodule src="https://unpkg.com/friendly-challenge@0.6.1/widget.min.js" async defer></script>
+      <div class="frc-captcha" data-sitekey="FCMQG79GF422P165"></div>
+
     `);
     res.end(); //end the response
   }
