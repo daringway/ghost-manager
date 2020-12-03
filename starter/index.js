@@ -46,40 +46,55 @@ async function onRequest(req, res) {
   res.writeHead(503, "503 Temporary Suspended", {'Content-Type': 'text/html'});
 
   if ( req.url.startsWith('/ghost') || req.url.endsWith('/edit/') ) {
-    res.write(`x
-    <head><meta http-equiv="refresh" content="10"></head>
+
+    res.write(`
+    <head></head>
     <body>
-    <h1>Ghost CMS is starting ...<h1>
+    <noscript>You need Javascript for CAPTCHA verification to submit this form.</noscript>
+
+    <script type="module" src="https://unpkg.com/friendly-challenge@0.6.1/widget.module.min.js" async defer></script>
+    <script nomodule src="https://unnoModulefriendly-challenge@0.6.1/widget.min.js" async defer></script>
     
-    <h2>The page you are trying to reach will load once the service has been restored. You don't need to do anything. 
-     No page reload, nothing.</h2>
-    <h2>As it can take several minutes to wake the service from it's sleeping slumber now would be a good time to take a break.
-    A few options for you include:
-    head to the bathroom, get some coffee, grab a beer, or call that loved one that you haven't talked in a while. 
-    </h2>
+    <form action="/action_page.php" method="get" id="nameform">
+       Ready to launch
+      <div class="frc-captcha" data-sitekey="FCMQG79GF422P165"></div>
+    </form>
     
     `);
-    for ( const line of lastOutput) {
-      res.write('<br>');
-      res.write(line);
-    }
-    res.write('</body>');
-    res.end();
-    //end the response
 
-    try {
-      await lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} )
-      console.log(`ghost started`)
-    } catch (err) {
-      console.log(`skipping start, already trying ${err}`);
-    }
+
+    // res.write(`
+    // <head><meta http-equiv="refresh" content="10"></head>
+    // <body>
+    // <h1>Ghost CMS is starting ...<h1>
+    //
+    // <h2>The page you are trying to reach will load once the service has been restored. You don't need to do anything.
+    //  No page reload, nothing.</h2>
+    // <h2>As it can take several minutes to wake the service from it's sleeping slumber now would be a good time to take a break.
+    // A few options for you include:
+    // head to the bathroom, get some coffee, grab a beer, or call that loved one that you haven't talked in a while.
+    // </h2>
+    //
+    // `);
+
+    // for ( const line of lastOutput) {
+    //   res.write('<br>');
+    //   res.write(line);
+    // }
+    // res.write('</body>');
+    // res.end();
+    // //end the response
+    //
+    // try {
+    //   await lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} )
+    //   console.log(`ghost started`)
+    // } catch (err) {
+    //   console.log(`skipping start, already trying ${err}`);
+    // }
+
   } else {
     res.write(`
       <h2>To auto start the Ghost CMS, use the admin url (hint hint, make sure the path starts with /ghost</h2>
-      <script type="module" src="https://unpkg.com/friendly-challenge@0.6.1/widget.module.min.js" async defer></script>
-      <script nomodule src="https://unpkg.com/friendly-challenge@0.6.1/widget.min.js" async defer></script>
-      <div class="frc-captcha" data-sitekey="FCMQG79GF422P165"></div>
-
     `);
     res.end(); //end the response
   }
