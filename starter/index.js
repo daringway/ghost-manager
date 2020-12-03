@@ -62,7 +62,7 @@ async function onRequest(req, res) {
     
     </body>
     `);
-
+    res.end();
 
     // res.write(`
     // <head><meta http-equiv="refresh" content="10"></head>
