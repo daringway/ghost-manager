@@ -118,6 +118,7 @@ async function onRequest(req, res) {
 
   if ( req.url.startsWith('/ghost') || req.url.endsWith('/edit/') ) {
 
+    console.log("req", JSON.stringify(req));
     displayValidationForm(req, res);
 
     // TODO Is captcha verify request?
