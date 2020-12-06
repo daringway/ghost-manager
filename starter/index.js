@@ -42,6 +42,8 @@ async function run(command, outputArr) {
   })
 }
 
+// {"forceJSFallback":false,"startMode":"focus","puzzleEndpoint":"https://friendlycaptcha.com/api/v1/puzzle"},"e":{},"puzzle":{"signature":"c9f17d5f90726dbe6e497245693be18e","base64":"X81pNqgdMHkELITFAWQUiAAAAAAAAAAAJMzw+Z9MAZI=","buffer":{"0":95,"1":205,"2":105,"3":54,"4":168,"5":29,"6":48,"7":121,"8":4,"9":44,"10":132,"11":197,"12":1,"13":100,"14":20,"15":136,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":36,"25":204,"26":240,"27":249,"28":159,"29":76,"30":1,"31":146},"n":20,"threshold":32765,"expiry":30000000}}
+
 async function displayValidationForm(req, res) {
   res.write(`
     <head></head>
@@ -54,12 +56,16 @@ async function displayValidationForm(req, res) {
     <script>
       function myCallback(solution) {
         console.log("Captcha finished with solution " + JSON.stringify(solution));
+        console.log('rc-captcha-solution: ' + rc-captcha-solution);
       }
     </script>
     
+    f
+    
+    <form>
     Your Ghost server is currently stopped.
     <div class="frc-captcha" data-sitekey="FCMQG79GF422P165" data-callback="myCallback"></div>
-    
+    </form>
        
     </body>
     `);
