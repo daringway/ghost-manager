@@ -42,7 +42,7 @@ async function run(command, outputArr) {
   })
 }
 
-function displayValidationForm(req, res) {
+async function displayValidationForm(req, res) {
   res.write(`
     <head></head>
     <body>
@@ -66,7 +66,7 @@ function displayValidationForm(req, res) {
   res.end();
 }
 
-function displayStatusPage(req, res) {
+async function displayStatusPage(req, res) {
   res.write(`
   <head><meta http-equiv="refresh" content="10"></head>
   <body>
@@ -91,7 +91,7 @@ function displayStatusPage(req, res) {
 
 }
 
-function validateRequest(req, res) {
+async function validateRequest(req, res) {
 
   // IF validated
   displayStatusPage(req, res);
