@@ -119,9 +119,11 @@ async function onRequest(req, res) {
 
   if ( req.url.startsWith('/ghost') || req.url.endsWith('/edit/') ) {
 
-    let query = url.parse(req.url, true);
-    // url contains frc-captcha-solution
-    console.log("req", JSON.stringify(query));
+    let parts = url.parse(req.url, true);
+    if ( parts.query['frc-captcha-solution'] ) {
+      console.log("validating", parts.query['frc-captcha-solution']);
+    }
+
     displayValidationForm(req, res);
 
     // TODO Is captcha verify request?
