@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "async-lock": "^1.2.4"
+    "async-lock": "^1.2.4",
+    "dotenv": "^8.2.0"
   }
 }

@@ -3,6 +3,7 @@ var http = require('http');
 const { spawn } = require('child_process');
 var url = require('url');
 
+require('dotenv').config({ path: '../.env' })
 
 var AsyncLock = require('async-lock');
 var lock = new AsyncLock({timeout: 500});
@@ -64,7 +65,7 @@ async function displayValidationForm(req, res) {
     
     <form>
       Your Ghost server is currently stopped.
-      <div class="frc-captcha" data-sitekey="FCMQG79GF422P165" data-callback="myCallback" startMode="none"></div>
+      <div class="frc-captcha" data-sitekey="${process.env.FRIENDLY_CAPTCHA_SITEKEY}" data-callback="myCallback" startMode="none"></div>
       
     </form>
        
@@ -122,19 +123,9 @@ async function onRequest(req, res) {
     let parts = url.parse(req.url, true);
     if ( parts.query['frc-captcha-solution'] ) {
       console.log("validating", parts.query['frc-captcha-solution']);
+    } else {
+      displayValidationForm(req, res);
     }
-
-    displayValidationForm(req, res);
-
-    // TODO Is captcha verify request?
-    // IF so verify
-    // If verified display output status page
-
-    // TODO if already in authorized request
-    // If so output status
-
-    // else
-    // Not authorized
 
   } else {
     res.write(`
