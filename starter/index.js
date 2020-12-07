@@ -58,13 +58,13 @@ async function displayValidationForm(req, res) {
     
     <script>
       function myCallback(solution) {
-        document.getElementById("starter").removeAttribute("hidden");
+        document.getElementById("starter").click();
       }
     </script>
     
     <form>
       Your Ghost server is currently stopped.
-      <div class="frc-captcha" data-sitekey="${process.env.FRIENDLY_CAPTCHA_SITEKEY}" data-callback="myCallback" data-start="auto"></div>
+      <div class="frc-captcha" data-sitekey="${process.env.FRIENDLY_CAPTCHA_SITEKEY}" data-callback="myCallback" data-start="none"></div>
       <input id="starter" type="submit" value="Start Ghost Server" hidden>
     </form>
        
