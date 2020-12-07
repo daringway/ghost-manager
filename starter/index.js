@@ -63,7 +63,7 @@ async function displayValidationForm(req, res) {
       function myCallback(solution) {
         document.getElementById("starter").setAttribute("hidden", false);
         console.log("Captcha finished with solution " + JSON.stringify(solution));
-        console.log("isHidden" document.getElementById("starter".getAttribute("hidden"));
+        console.log("isHidden", document.getElementById("starter".getAttribute("hidden")));
       }
     </script>
     
