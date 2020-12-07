@@ -56,7 +56,7 @@ async function displayValidationForm(req, res) {
     <body>
     <noscript>You need Javascript for CAPTCHA verification to submit this form.</noscript>
 
-    <script nomodule src="https://unnoModulefriendly-challenge@0.6.1/widget.min.js" async defer></script>
+    <script type="module" src="https://unpkg.com/friendly-challenge@0.6.1/widget.module.min.js" async defer></script>
     
     <script>
       function myCallback(solution) {
