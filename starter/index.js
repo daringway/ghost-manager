@@ -105,7 +105,7 @@ async function validateRequest(req, res, solution) {
   axios
     .post( captchaVerifyUrl, {
       solution: solution,
-      secret: proces.env.FRIENDLY_CAPTCHA_APIKEY,
+      secret: process.env.FRIENDLY_CAPTCHA_APIKEY,
       sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
     })
     .then(res => {
