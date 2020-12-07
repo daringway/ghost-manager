@@ -67,7 +67,7 @@ async function displayValidationForm(req, res) {
     
     <form>
       Your Ghost server is currently stopped.
-      <div class="frc-captcha" data-sitekey="${process.env.FRIENDLY_CAPTCHA_SITEKEY}" data-callback="myCallback" data-start="auto"></div>
+      <div class="frc-captcha" data-sitekey="${process.env.FRIENDLY_CAPTCHA_SITEKEY}" data-callback="myCallback" data-start="none"></div>
       <input type="submit" hidden=true>
     </form>
        
@@ -100,22 +100,21 @@ async function displayStatusPage(req, res) {
 
 }
 
-async function validateRequest(req, res, parts) {
-  // console.log("validating", parts.query['frc-captcha-solution']);
+async function validateRequest(req, res, solution) {
 
-  // await axios
-  //   .post( captchaVerifyUrl, {
-  //     solution: parts.query['frc-captcha-solution'],
-  //     secret: proces.env.FRIENDLY_CAPTCHA_APIKEY,
-  //     sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
-  //   })
-  //   .then(res => {
-  //     console.log(`statusCode: ${res.statusCode}`)
-  //     console.log(res)
-  //   })
-  //   .catch(error => {
-  //     console.error(error)
-  //   })
+  await axios
+    .post( captchaVerifyUrl, {
+      solution: solution,
+      secret: proces.env.FRIENDLY_CAPTCHA_APIKEY,
+      sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
+    })
+    .then(res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      console.log(res)
+    })
+    .catch(error => {
+      console.error(error)
+    })
 
 
   // IF validated
@@ -140,6 +139,7 @@ async function onRequest(req, res) {
     let parts = url.parse(req.url, true);
     if ( parts.query['frc-captcha-solution'] ) {
       console.log("validating", parts.query['frc-captcha-solution']);
+      validateRequest(req, res, parts.query['frc-captcha-solution'])
       displayValidationForm(req,res);
     } else {
       console.log("not validated yet");
