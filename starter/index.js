@@ -2,7 +2,7 @@
 var http = require('http');
 const { spawn } = require('child_process');
 var url = require('url');
-const axios = require('axios')
+// const axios = require('axios')
 
 
 require('dotenv').config({ path: '.env' })
@@ -68,7 +68,7 @@ async function displayValidationForm(req, res) {
     
     <form>
       Your Ghost server is currently stopped.
-      <div class="frc-captcha" data-sitekey="FCMQG79GF422P165" data-callback="myCallback" startMode="none"></div>
+      <div class="frc-captcha" data-sitekey="${process.env.FRIENDLY_CAPTCHA_SITEKEY}" data-callback="myCallback" startMode="focus"></div>
     </form>
        
     </body>
@@ -104,19 +104,19 @@ async function displayStatusPage(req, res) {
 async function validateRequest(req, res, parts) {
   // console.log("validating", parts.query['frc-captcha-solution']);
 
-  await axios
-    .post( captchaVerifyUrl, {
-      solution: parts.query['frc-captcha-solution'],
-      secret: proces.env.FRIENDLY_CAPTCHA_APIKEY,
-      sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
-    })
-    .then(res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      console.log(res)
-    })
-    .catch(error => {
-      console.error(error)
-    })
+  // await axios
+  //   .post( captchaVerifyUrl, {
+  //     solution: parts.query['frc-captcha-solution'],
+  //     secret: proces.env.FRIENDLY_CAPTCHA_APIKEY,
+  //     sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
+  //   })
+  //   .then(res => {
+  //     console.log(`statusCode: ${res.statusCode}`)
+  //     console.log(res)
+  //   })
+  //   .catch(error => {
+  //     console.error(error)
+  //   })
 
 
   // IF validated
