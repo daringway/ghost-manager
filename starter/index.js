@@ -2,12 +2,15 @@
 var http = require('http');
 const { spawn } = require('child_process');
 var url = require('url');
+const axios = require('axios')
+
 
 require('dotenv').config({ path: '.env' })
 
 var AsyncLock = require('async-lock');
 var lock = new AsyncLock({timeout: 500});
 var lockKey = "ghost_starting";
+var captchaVerifyUrl = "https://friendlycaptcha.com/api/v1/siteverify";
 
 var lastOutput = [];
 
@@ -99,10 +102,26 @@ async function displayStatusPage(req, res) {
 
 }
 
-async function validateRequest(req, res) {
+async function validateRequest(req, res, parts) {
+  // console.log("validating", parts.query['frc-captcha-solution']);
+
+  axios
+    .post( captchaVerifyUrl, {
+      solution: parts.query['frc-captcha-solution'],
+      secret: proces.env.FRIENDLY_CAPTCHA_APIKEY,
+      sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
+    })
+    .then(res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      console.log(res)
+    })
+    .catch(error => {
+      console.error(error)
+    })
+
 
   // IF validated
-  displayStatusPage(req, res);
+  // displayStatusPage(req, res);
 
   try {
     await lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} )
@@ -122,7 +141,8 @@ async function onRequest(req, res) {
 
     let parts = url.parse(req.url, true);
     if ( parts.query['frc-captcha-solution'] ) {
-      console.log("validating", parts.query['frc-captcha-solution']);
+      console.log('validating')
+      validateRequest(req,res, parts)
     } else {
       console.log("not validated yet");
       displayValidationForm(req, res);
