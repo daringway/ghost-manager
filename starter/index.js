@@ -62,8 +62,6 @@ async function displayValidationForm(req, res) {
     <script>
       function myCallback(solution) {
         document.getElementById("starter").removeAttribute("hidden");
-        console.log("Captcha finished with solution " + JSON.stringify(solution));
-        console.log("isHidden", document.getElementById("starter").getAttribute("hidden"));
       }
     </script>
     
@@ -104,7 +102,7 @@ async function displayStatusPage(req, res) {
 
 async function validateRequest(req, res, solution) {
 
-  await axios
+  axios
     .post( captchaVerifyUrl, {
       solution: solution,
       secret: proces.env.FRIENDLY_CAPTCHA_APIKEY,
@@ -119,15 +117,12 @@ async function validateRequest(req, res, solution) {
     })
 
 
-  // IF validated
-  // displayStatusPage(req, res);
-
-  try {
-    await lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} )
-    console.log(`ghost started`)
-  } catch (err) {
-    console.log(`skipping start, already trying ${err}`);
-  }
+  // try {
+  //   await lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} )
+  //   console.log(`ghost started`)
+  // } catch (err) {
+  //   console.log(`skipping start, already trying ${err}`);
+  // }
 
 }
 
