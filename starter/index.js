@@ -62,8 +62,8 @@ async function displayValidationForm(req, res) {
     
     <form>
       Your Ghost server is currently stopped.
-      <div class="frc-captcha" data-sitekey="FCMQG79GF422P165" data-callback="myCallback" startMode="focus"></div>
-      <input type="submit" value="Start Ghost Server">
+      <div class="frc-captcha" data-sitekey="FCMQG79GF422P165" data-callback="myCallback" startMode="none"></div>
+      
     </form>
        
     </body>
