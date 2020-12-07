@@ -124,6 +124,7 @@ async function onRequest(req, res) {
     if ( parts.query['frc-captcha-solution'] ) {
       console.log("validating", parts.query['frc-captcha-solution']);
     } else {
+      console.log("not validated yet");
       displayValidationForm(req, res);
     }
 
