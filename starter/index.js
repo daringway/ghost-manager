@@ -139,10 +139,11 @@ async function onRequest(req, res) {
 
   if ( req.url.startsWith('/ghost') || req.url.endsWith('/edit/') ) {
 
+    console.log('entering');
     let parts = url.parse(req.url, true);
     if ( parts.query['frc-captcha-solution'] ) {
-      console.log('validating')
-      validateRequest(req,res, parts)
+      console.log('validating');
+      validateRequest(req,res, parts);
     } else {
       console.log("not validated yet");
       displayValidationForm(req, res);
