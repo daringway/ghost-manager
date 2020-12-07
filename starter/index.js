@@ -3,7 +3,7 @@ var http = require('http');
 const { spawn } = require('child_process');
 var url = require('url');
 
-require('dotenv').config({ path: '../.env' })
+require('dotenv').config({ path: '.env' })
 
 var AsyncLock = require('async-lock');
 var lock = new AsyncLock({timeout: 500});
