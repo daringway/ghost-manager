@@ -1,6 +1,8 @@
 
 var http = require('http');
 const { spawn } = require('child_process');
+var url = require('url');
+
 
 var AsyncLock = require('async-lock');
 var lock = new AsyncLock({timeout: 500});
@@ -117,7 +119,9 @@ async function onRequest(req, res) {
 
   if ( req.url.startsWith('/ghost') || req.url.endsWith('/edit/') ) {
 
-    console.log("req", JSON.stringify(req.url));
+    let query = url.parse(req.url, true);
+    // url contains frc-captcha-solution
+    console.log("req", JSON.stringify(query));
     displayValidationForm(req, res);
 
     // TODO Is captcha verify request?
