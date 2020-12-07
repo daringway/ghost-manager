@@ -61,7 +61,7 @@ async function displayValidationForm(req, res) {
     
     <script>
       function myCallback(solution) {
-        document.getElementById("starter").setAttribute("hidden", false);
+        document.getElementById("starter").deleteAttribute("hidden");
         console.log("Captcha finished with solution " + JSON.stringify(solution));
         console.log("isHidden", document.getElementById("starter").getAttribute("hidden"));
       }
@@ -70,7 +70,7 @@ async function displayValidationForm(req, res) {
     <form>
       Your Ghost server is currently stopped.
       <div class="frc-captcha" data-sitekey="${process.env.FRIENDLY_CAPTCHA_SITEKEY}" data-callback="myCallback" data-start="none"></div>
-      <input id="starter" type="submit" hidden=true>
+      <input id="starter" type="submit" hidden>
     </form>
        
     </body>
