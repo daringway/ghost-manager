@@ -109,13 +109,12 @@ async function validateRequest(req, res, solution) {
       sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
     })
     .then(res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      console.log(res)
+      console.log(`statusCode: ${res.status}`)
+      console.log(res.data)
     })
     .catch(error => {
       console.error(error)
     })
-
 
   // try {
   //   await lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} )
