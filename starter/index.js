@@ -105,7 +105,7 @@ async function displayStatusPage(req, res) {
 async function validateRequest(req, res, parts) {
   // console.log("validating", parts.query['frc-captcha-solution']);
 
-  axios
+  await axios
     .post( captchaVerifyUrl, {
       solution: parts.query['frc-captcha-solution'],
       secret: proces.env.FRIENDLY_CAPTCHA_APIKEY,
