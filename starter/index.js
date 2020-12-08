@@ -118,7 +118,11 @@ async function validateRequest(req, res, solution) {
           console.log("starting ghost server")
             try {
               // TODO need to await the lock
-              lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} );
+              lock.acquire(lockKey, async () => {
+                  await run("./bin/ghost-start", lastOutput);
+                  lastOutput = [];
+                  authorizedList = [];
+              } );
               console.log(`ghost started`)
             } catch (err) {
               console.log(`skipping start, already trying ${err}`);
