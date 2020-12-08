@@ -12,6 +12,7 @@ var lockKey = "ghost_starting";
 var captchaVerifyUrl = "https://friendlycaptcha.com/api/v1/siteverify";
 
 var lastOutput = [];
+var authorizedList = [];
 
 const sleepAmount = 30 * 1000
 
@@ -99,32 +100,37 @@ async function displayStatusPage(req, res) {
 
 async function validateRequest(req, res, solution) {
 
-  axios
-    .post( captchaVerifyUrl, {
-      solution: solution,
-      secret: process.env.FRIENDLY_CAPTCHA_APIKEY,
-      sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
-    })
-    .then(res => {
-      console.log(`statusCode: ${res.status}`)
-      console.log(res.data)
-      if ( res.data.success ) {
-      //  Start
-        console.log("starting ghost server")
-      //   try {
-      //     await lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} )
-      //     console.log(`ghost started`)
-      //   } catch (err) {
-      //     console.log(`skipping start, already trying ${err}`);
-      //   }
-      } else {
-        console.log('errro');
-      }
-    })
-    .catch(error => {
-      console.error(error)
-    })
-
+  if ( solution in authorizedList ) {
+    displayStatusPage(req, res);
+  } else {
+    axios
+      .post(captchaVerifyUrl, {
+        solution: solution,
+        secret: process.env.FRIENDLY_CAPTCHA_APIKEY,
+        sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
+      })
+      .then(res => {
+        console.log(`statusCode: ${res.status}`);
+        authorizedList.push(solution);
+        displayStatusPage(req, res);
+        if (res.data.success) {
+          //  Start
+          console.log("starting ghost server")
+            try {
+              // TODO need to await the lock
+              lock.acquire(lockKey, () => { run("./bin/ghost-start", lastOutput)} );
+              console.log(`ghost started`)
+            } catch (err) {
+              console.log(`skipping start, already trying ${err}`);
+            }
+        } else {
+          console.log('errro');
+        }
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }
 }
 
 async function onRequest(req, res) {
@@ -138,7 +144,6 @@ async function onRequest(req, res) {
     if ( parts.query['frc-captcha-solution'] ) {
       console.log("validating", parts.query['frc-captcha-solution']);
       validateRequest(req, res, parts.query['frc-captcha-solution'])
-      displayValidationForm(req,res);
     } else {
       console.log("not validated yet");
       displayValidationForm(req, res);
