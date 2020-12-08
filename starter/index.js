@@ -31,7 +31,7 @@ async function run(command, outputArr) {
         const mesg = `${command} exited ${code} : ${signal}`;
         outputArr.push(mesg);
         console.log(mesg);
-        console.log("Waiting on NGINX to notice that the ghost server is up.")
+        outputArr.push("Waiting on NGINX to notice that the ghost server is up.")
         setTimeout(resolve, sleepAmount);
       })
 
