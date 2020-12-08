@@ -109,11 +109,11 @@ async function validateRequest(req, res, solution) {
         secret: process.env.FRIENDLY_CAPTCHA_APIKEY,
         sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
       })
-      .then(res => {
-        console.log(`statusCode: ${res.status}`);
-        authorizedList.push(solution);
-        displayStatusPage(req, res);
+      .then(frcres => {
+        console.log(`statusCode: ${frcres.status}`);
         if (res.data.success) {
+          authorizedList.push(solution);
+          displayStatusPage(req, res);
           //  Start
           console.log("starting ghost server")
             try {
@@ -124,7 +124,8 @@ async function validateRequest(req, res, solution) {
               console.log(`skipping start, already trying ${err}`);
             }
         } else {
-          console.log('errro');
+          displayValidationForm(req, res);
+          console.log('error');
         }
       })
       .catch(error => {
