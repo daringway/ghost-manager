@@ -100,41 +100,37 @@ async function displayStatusPage(req, res) {
 
 async function validateRequest(req, res, solution) {
 
-  if ( authorizedList.includes(solution) ) {
-    displayStatusPage(req, res);
-  } else {
-    axios
-      .post(captchaVerifyUrl, {
-        solution: solution,
-        secret: process.env.FRIENDLY_CAPTCHA_APIKEY,
-        sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
-      })
-      .then(frcres => {
-        console.log(`statusCode: ${frcres.status}`);
-        if (frcres.data && frcres.data.success) {
-          authorizedList.push(solution);
-          displayStatusPage(req, res);
-          //  Start
-          console.log("starting ghost server")
-            try {
-              lock.acquire(lockKey, async () => {
-                  await run("./bin/ghost-start", lastOutput);
-                  lastOutput = [];
-                  authorizedList = [];
-              } );
-              console.log(`ghost started`)
-            } catch (err) {
-              console.log(`skipping start, already trying ${err}`);
-            }
-        } else {
-          displayValidationForm(req, res);
-          console.log('error');
-        }
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }
+  axios
+    .post(captchaVerifyUrl, {
+      solution: solution,
+      secret: process.env.FRIENDLY_CAPTCHA_APIKEY,
+      sitekey: process.env.FRIENDLY_CAPTCHA_SITEKEY
+    })
+    .then(frcres => {
+      console.log(`statusCode: ${frcres.status}`);
+      if (frcres.data && frcres.data.success) {
+        lastOutput.push('Ghost Server Starting UP.');
+        displayStatusPage(req, res);
+        //  Start
+        console.log("starting ghost server")
+          try {
+            lock.acquire(lockKey, async () => {
+                await run("./bin/ghost-start", lastOutput);
+                lastOutput = [];
+            } );
+            console.log(`ghost started`)
+          } catch (err) {
+            console.log(`skipping start, already trying ${err}`);
+          }
+      } else {
+        displayValidationForm(req, res);
+        console.log('error');
+      }
+    })
+    .catch(error => {
+      console.error(error)
+    })
+
 }
 
 async function onRequest(req, res) {
@@ -145,7 +141,10 @@ async function onRequest(req, res) {
   if ( req.url.startsWith('/ghost') || req.url.endsWith('/edit/') ) {
 
     let parts = url.parse(req.url, true);
-    if ( parts.query['frc-captcha-solution'] ) {
+
+    if ( lastOutput.length > 0 ) {
+      displayStatusPage(req, res);
+    } else if ( parts.query['frc-captcha-solution'] ) {
       console.log("validating", parts.query['frc-captcha-solution']);
       validateRequest(req, res, parts.query['frc-captcha-solution'])
     } else {
