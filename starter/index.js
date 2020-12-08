@@ -22,6 +22,8 @@ async function run(command, outputArr) {
   return new Promise((resolve, reject) => {
     console.log(`starting ${command}`)
     outputArr.length = 0;
+    outputArr.push('Ghost Server Starting UP.');
+
     try {
       let cmd = spawn(command);
 
@@ -110,7 +112,6 @@ async function validateRequest(req, res, solution) {
     .then(frcres => {
       console.log(`statusCode: ${frcres.status}`);
       if (frcres.data && frcres.data.success) {
-        lastOutput.push('Ghost Server Starting UP.');
         displayStatusPage(req, res);
         //  Start
         console.log("starting ghost server")
