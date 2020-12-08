@@ -111,7 +111,7 @@ async function validateRequest(req, res, solution) {
       })
       .then(frcres => {
         console.log(`statusCode: ${frcres.status}`);
-        if (res.data.success) {
+        if (frcres.data && frcres.data.success) {
           authorizedList.push(solution);
           displayStatusPage(req, res);
           //  Start
