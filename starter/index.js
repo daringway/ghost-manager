@@ -100,7 +100,7 @@ async function displayStatusPage(req, res) {
 
 async function validateRequest(req, res, solution) {
 
-  if ( solution in authorizedList ) {
+  if ( authorizedList.contains(solution) ) {
     displayStatusPage(req, res);
   } else {
     axios
