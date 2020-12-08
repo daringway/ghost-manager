@@ -117,7 +117,6 @@ async function validateRequest(req, res, solution) {
           //  Start
           console.log("starting ghost server")
             try {
-              // TODO need to await the lock
               lock.acquire(lockKey, async () => {
                   await run("./bin/ghost-start", lastOutput);
                   lastOutput = [];
