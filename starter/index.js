@@ -140,7 +140,7 @@ async function onRequest(req, res) {
   // 503 is Temporary Suspended
   res.writeHead(503, "503 Temporary Suspended", {'Content-Type': 'text/html'});
 
-  if ( req.url.startsWith('/ghost') || req.url.endsWith('/edit/') ) {
+  if ( req.url.startsWith('/ghost') || req.url.indexOf('/edit/') >= 0 ) {
 
     let parts = url.parse(req.url, true);
 
