@@ -38,7 +38,7 @@ echo "*** invalidating cloudfront"
 # Upload public files
 for DIR in $(find $GHOST_DIR/content -name public_files)
 do
-  aws s3 sync --no-progress $DIR $WEB_BUCKET_CMS_BUCKET_PREFIX/files
+  aws s3 sync --no-progress $DIR $WEB_BUCKET_PREFIX/files
 done
 
 aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths '/*'
