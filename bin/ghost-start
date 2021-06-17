@@ -3,15 +3,12 @@
 source $(dirname $0)/../.env
 
 function capacity {
-   aws rds describe-db-clusters --db-cluster-identifier websites-57 | jq '.DBClusters[0].Capacity'
+   aws rds describe-db-clusters --db-cluster-identifier $DATABASE_CLUSTER | jq '.DBClusters[0].Capacity'
 }
-
-# Wake the database if it is paused
-CLUSTER=${DATABASE_HOST%%.*}
 
 if (( $(capacity) == 0 ))
 then
-  aws rds modify-current-db-cluster-capacity  --db-cluster-identifier  $CLUSTER --capacity 1
+  aws rds modify-current-db-cluster-capacity  --db-cluster-identifier  $DATABASE_CLUSTER --capacity 1
 fi
 
 count=0

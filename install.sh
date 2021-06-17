@@ -14,7 +14,6 @@ then
 fi
 
 START_TS=$(date +%s)
-
 echo "ghost-serverless ts 0: starting"
 
 # Add Repos
