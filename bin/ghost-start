@@ -25,6 +25,9 @@ do
   sleep 5
 done
 
+# Check the SSL
+/etc/letsencrypt/acme.sh --cron --home /etc/letsencrypt/
+
 cd $GHOST_DIR
 sudo find ./ ! -path "./versions/*" -type f -exec chmod 664 {} \;
 
