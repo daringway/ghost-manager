@@ -2,6 +2,32 @@
 
 source $(dirname $0)/../.env
 
+function capacity {
+   aws rds describe-db-clusters --db-cluster-identifier websites-57 | jq '.DBClusters[0].Capacity'
+}
+
+# Wake the database if it is paused
+CLUSTER=${DATABASE_HOST%%.*}
+
+if (( $(capacity) == 0 ))
+then
+  aws rds modify-current-db-cluster-capacity  --db-cluster-identifier  $CLUSTER --capacity 1
+fi
+
+count=0
+while (( $(capacity) == 0 ))
+do
+  # Give Aurora worst case start time of 5 minutes
+  if (( $count == 60))
+  then
+    echo "ERROR: Failed to start database"
+    exit
+  fi
+  echo "Waiting for database to wake up"
+  count=$(($count + 1))
+  sleep 5
+done
+
 cd $GHOST_DIR
 sudo find ./ ! -path "./versions/*" -type f -exec chmod 664 {} \;
 

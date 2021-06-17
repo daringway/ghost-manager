@@ -22,8 +22,10 @@ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 apt-get update
 
-snap install --classic aws-cli
-apt-get install -y jq fish
+apt-get install -y jq fish unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+./aws/install
 
 # change ubuntu to fish, yes really
 sudo chsh -s /usr/bin/fish ubuntu
