@@ -25,7 +25,7 @@ then
   done
 
   # Give database moment to start all the way
-  sleep 30
+  sleep 60
 fi
 
 # Check the SSL
