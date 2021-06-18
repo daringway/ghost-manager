@@ -78,6 +78,7 @@ chmod 775 /var/www/ghost
 
 # TODO update nginx upload limit
 
+#curl https://get.acme.sh | sh -s email=certs@daringway.com --home /etc/letsencrypt/
 # Wrap this in a webserver so you can see the status from the browser (Or at least give steps and not full logs)
 su ubuntu -c $INSTALL_DIR/bin/site-restore
 

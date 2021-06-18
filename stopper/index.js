@@ -31,7 +31,7 @@ async function loop() {
         console.log(`error stopping ghost: ${stderr}`);
       }
     } catch (err) {
-      console.log(`caught error stoppign ${err}`);
+      console.log(`caught error stopping ${err}`);
     }
 
     wakeUpTimestamp = new Date().getTime() + sleepAmount

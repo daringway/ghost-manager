@@ -14,7 +14,7 @@ var captchaVerifyUrl = "https://friendlycaptcha.com/api/v1/siteverify";
 var lastOutput = [];
 var authorizedList = [];
 
-const sleepAmount = 30 * 1000
+const sleepAmount = 60 * 1000
 
 // Uses https://friendlycaptcha.com
 
