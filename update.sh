@@ -5,6 +5,8 @@
 
 cd $(dirname $0)
 
+git pull
+
 while read LINE
 do
   eval $LINE
@@ -14,7 +16,6 @@ GHOST_DIR=${GHOST_DIR-/var/www/ghost}
 PROJ_DIR=${PROJ_DIR-$(cd $(dirname ${0}); pwd)}
 BACKUP_FILENAME=${BACKUP_FILENAME-ghost-backup.tbz2}
 BACKUP_DIR=${BACKUP_DIR-${PROJ_DIR}/backups}
-TEMPLATE_DIR=${PROJ_DIR}/templates
 WEB_DIR=${WEB_DIR-${PROJ_DIR}/static_website}
 
 echo "
@@ -30,6 +31,7 @@ INACTIVE_SECONDS=${INACTIVE_SECONDS-7200}
 GHOST_DIR=$GHOST_DIR
 BACKUP_DIR=$BACKUP_DIR
 WEB_DIR=$WEB_DIR
+TEMPLATE_DIR=${PROJ_DIR}/templates
 BACKUP_FILENAME=${BACKUP_FILENAME}
 LOG_DIR=${GHOST_DIR}/content/logs
 BACKUP_FILE=${BACKUP_DIR}/${BACKUP_FILENAME}

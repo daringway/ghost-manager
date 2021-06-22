@@ -22,7 +22,7 @@ module.exports = {
     cron: "*/15 * * * *",
   }, {
     name: "update_settings",
-    script: "git pull; ./update.sh",
+    script: "./update.sh",
     exec_mode: 'fork',
     instances : 1,
     cron: "2 * * * *"
