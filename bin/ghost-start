@@ -36,6 +36,6 @@ cd $GHOST_DIR
 sudo find ./ ! -path "./versions/*" -type f -exec chmod 664 {} \;
 
 # Generate config file
-cat ${TEMPLATE_DIR}/config.production.json | mo > ${GHOST_DIR}/config.production.json
+cat ${TEMPLATE_DIR}/config.production.json | ${PROJ_DIR}/bin/mo > ${GHOST_DIR}/config.production.json
 
 ghost start
