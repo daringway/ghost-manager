@@ -29,6 +29,7 @@ sudo find $GHOST_DIR/ ! -path "./versions/*" -type f -exec chmod 664 {} \;
 
 
 cd $GHOST_DIR
+cat ${TEMPLATE_DIR}/config.production.json | ${GS_BIN}/mo > ${GHOST_DIR}/config.production.json
 ghost setup --no-prompt
 ghost start
 
