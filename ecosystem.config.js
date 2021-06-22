@@ -16,11 +16,17 @@ module.exports = {
     }
   }, {
     name: 'stopper',
-    script: './stopper/index.js',
-    watch: ['./stopper'],
+    script: './bin/ghost-stop',
     instances : 1,
-    env : {
-      CHECK_INTERVAL : 300
-    }
-  }],
+    exec_mode: 'fork',
+    cron: "*/15 * * * *",
+  }, {
+    name: "update_settings",
+    script: "git pull; ./update.sh",
+    exec_mode: 'fork',
+    instances : 1,
+    cron: "2 * * * *"
+  }
+
+  ],
 };
