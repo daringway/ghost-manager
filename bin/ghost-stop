@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source $(dirname $0)/../.env
+set -a; source $(dirname $0)/../.env; set +a
 
 cd $GHOST_DIR
 ghost stop

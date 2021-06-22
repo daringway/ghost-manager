@@ -7,7 +7,7 @@
 #5) Sync static site to S3 www bucket
 #6) Invalidate CloudFront
 
-source $(dirname $0)/../.env
+set -a; source $(dirname $0)/../.env; set +a
 
 # Backup content images
 aws s3 sync --delete --no-follow-symlinks --no-progress $GHOST_DIR/content/images $CMS_BUCKET_PREFIX/images

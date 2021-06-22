@@ -20,12 +20,14 @@ module.exports = {
     instances : 1,
     exec_mode: 'fork',
     cron: "*/15 * * * *",
+    autorestart: false
   }, {
     name: "update_settings",
     script: "./update.sh",
     exec_mode: 'fork',
     instances : 1,
-    cron: "2 * * * *"
+    cron: "2 * * * *",
+    autorestart: false
   }
 
   ],

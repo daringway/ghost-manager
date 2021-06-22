@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source $(dirname $0)/../.env
+set -a; source $(dirname $0)/../.env; set +a
 
 function capacity {
    aws rds describe-db-clusters --db-cluster-identifier $DATABASE_CLUSTER | jq '.DBClusters[0].Capacity'
