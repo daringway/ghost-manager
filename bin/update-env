@@ -5,8 +5,6 @@
 
 cd $(dirname $0)
 
-git pull
-
 while read LINE
 do
   eval $LINE
