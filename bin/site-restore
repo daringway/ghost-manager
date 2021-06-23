@@ -27,11 +27,7 @@ sudo mkdir -p $GHOST_DIR/content/logs
 sudo chown -R ghost:ghost $GHOST_DIR/content/logs
 sudo find $GHOST_DIR/ ! -path "./versions/*" -type f -exec chmod 664 {} \;
 
-
-cd $GHOST_DIR
-cat ${TEMPLATE_DIR}/config.production.json | ${GS_BIN}/mo > ${GHOST_DIR}/config.production.json
-ghost setup --no-prompt
-ghost start
+${GS_BIN}/ghost-start
 
 # Start last to make sure that the starter doesn't start before the ghost site is installed
 sudo systemctl restart nginx

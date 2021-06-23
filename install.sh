@@ -43,7 +43,7 @@ done
 echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): AWS creds verified"
 
 # Setup the .env
-$INSTALL_DIR/update.sh
+$INSTALL_DIR/bin/update-env
 source $INSTALL_DIR/.env
 
 hostname $( echo $CMS_HOSTNAME | tr . - )

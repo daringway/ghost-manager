@@ -22,14 +22,6 @@ module.exports = {
     env : {
       CHECK_INTERVAL : 300
     }
-  }, {
-    name: "update_settings",
-    script: "./update.sh",
-    exec_mode: 'fork',
-    instances : 1,
-    cron: "2 * * * *",
-    autorestart: false
   }
-
   ],
 };
