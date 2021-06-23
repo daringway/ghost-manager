@@ -3,15 +3,13 @@
 # TODO check that you have aws credentials
 # TODO check that SSM_PREFIX tag
 
-cd $(dirname $0)
-
 while read LINE
 do
   eval $LINE
-done < <(./bin/aws-env-vars)
+done < <($(dirname $0)/aws-env-vars)
 
 GHOST_DIR=${GHOST_DIR-/var/www/ghost}
-PROJ_DIR=${PROJ_DIR-$(cd $(dirname ${0})/..; pwd)}
+PROJ_DIR=${PROJ_DIR-$(cd $(dirname ${0}); cd ..; pwd)}
 BACKUP_FILENAME=${BACKUP_FILENAME-ghost-backup.tbz2}
 BACKUP_DIR=${BACKUP_DIR-${PROJ_DIR}/backups}
 WEB_DIR=${WEB_DIR-${PROJ_DIR}/static_website}
