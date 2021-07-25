@@ -27,6 +27,9 @@ sudo mkdir -p $GHOST_DIR/content/logs
 sudo chown -R ghost:ghost $GHOST_DIR/content/logs
 sudo find $GHOST_DIR/ ! -path "./versions/*" -type f -exec chmod 664 {} \;
 
+cd /var/www/ghost
+ghost setup --no-prompt --no-start
+
 ${GS_BIN}/ghost-start
 
 # Start last to make sure that the starter doesn't start before the ghost site is installed
