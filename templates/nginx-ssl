@@ -19,6 +19,6 @@ server {
     }
 
     client_max_body_size 50m;
-    ssl_certificate /etc/letsencrypt/{{CMS_HOSTNAME}}/fullchain.cer;
-    ssl_certificate_key /etc/letsencrypt/{{CMS_HOSTNAME}}/{{CMS_HOSTNAME}}.key;
+    ssl_certificate     /var/www/ghost/system/letsencrypt/{{CMS_HOSTNAME}}/fullchain.cer;
+    ssl_certificate_key /var/www/ghost/system/letsencrypt/{{CMS_HOSTNAME}}/{{CMS_HOSTNAME}}.key;
 }
