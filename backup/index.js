@@ -38,9 +38,9 @@ http.createServer(async function (req, res) {
 
   try {
     await lock.acquire(lockKey, publish)
-    console.log(`publishing started`)
+    console.log(`backup started`)
   } catch (err) {
-    console.log(`failed to acuire publishing lock ${err}`);
+    console.log(`failed to acquire publishing lock ${err}`);
   }
 
 }).listen(8888); //the server object listens on port 8080

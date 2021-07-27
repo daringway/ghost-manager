@@ -65,7 +65,7 @@ echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): all packages installed
 # Setup firewall
 ufw allow 'Nginx Full'
 
-for DIR in $INSTALL_DIR/publisher $INSTALL_DIR/starter $INSTALL_DIR/stopper
+for DIR in $INSTALL_DIR/backup $INSTALL_DIR/publisher $INSTALL_DIR/starter $INSTALL_DIR/stopper
 do
   (cd $DIR; npm install)
 done
