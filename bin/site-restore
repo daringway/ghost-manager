@@ -40,6 +40,6 @@ sudo ln -s /etc/nginx/sites-available/${CMS_HOSTNAME}-ssl.conf /etc/nginx/sites-
 sudo systemctl restart nginx
 
 cd /var/www/ghost
-ghost setup --no-prompt --no-start
+ghost setup --no-prompt --no-nginx --no-start
 
 ${GS_BIN}/ghost-start
