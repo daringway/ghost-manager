@@ -1,5 +1,5 @@
 {
-  "url": "https://{{CMS_HOSTNAME}}/",
+  "url": "https://{{WEB_HOSTNAME}}/",
   "admin": {
     "url": "https://{{CMS_HOSTNAME}}/"
   },
