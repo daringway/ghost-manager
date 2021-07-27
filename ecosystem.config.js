@@ -2,8 +2,8 @@
 module.exports = {
   apps : [{
     name: 'backup-service',
-    script: './backup/index.js',
-    watch: ['./backup'],
+    script: './services/backup/index.js',
+    watch: ['./services/backup'],
     instances : 1,
     env : {
     }

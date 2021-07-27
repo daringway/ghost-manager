@@ -2,22 +2,22 @@
 module.exports = {
   apps : [{
     name: 'publisher',
-    script: './publisher/index.js',
-    watch: ['./publisher'],
+    script: './services/publisher/index.js',
+    watch: ['./services/publisher'],
     instances : 1,
     env : {
     }
   }, {
     name: 'starter',
-    script: './starter/index.js',
-    watch: ['./starter'],
+    script: './services/starter/index.js',
+    watch: ['./services/starter'],
     instances : 1,
     env : {
     }
   }, {
     name: 'stopper',
-    script: './stopper/index.js',
-    watch: ['./stopper'],
+    script: './services/stopper/index.js',
+    watch: ['./services/stopper'],
     instances : 1,
     env : {
       CHECK_INTERVAL : 300
