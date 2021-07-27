@@ -33,8 +33,10 @@ cat ${TEMPLATE_DIR}/config.production.json | ${GS_BIN}/mo > ${GHOST_DIR}/config.
 
 # Start last to make sure that the starter doesn't start before the ghost site is installed
 sudo rm /etc/nginx/sites-enabled/*
-touch ${GHOST_DIR}/system/files/${CMS_HOSTNAME}.conf
-cat ${TEMPLATE_DIR}/nginx-ssl | ${GS_BIN}/mo > ${GHOST_DIR}/system/files/${CMS_HOSTNAME}-ssl.conf
+
+sudo touch /etc/nginx/sites-available/${CMS_HOSTNAME}.conf
+cat ${TEMPLATE_DIR}/nginx-ssl | sudo ${GS_BIN}/mo > /etc/nginx/sites-available/${CMS_HOSTNAME}-ssl.conf
+sudo ln -s /etc/nginx/sites-available/${CMS_HOSTNAME}-ssl.conf /etc/nginx/sites-enabled/${CMS_HOSTNAME}-ssl.conf
 sudo systemctl restart nginx
 
 cd /var/www/ghost
