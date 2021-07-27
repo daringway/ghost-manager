@@ -29,11 +29,6 @@ then
   sleep 60
 fi
 
-# Check the SSL
-# curl https://get.acme.sh | sh -s email=certs@daringway.com --home /etc/letsencrypt/
-#/var/www/ghost/system/letsencrypt/acme.sh --renew --dns dns_aws -d ghost.beerandcookies.club --home /var/www/ghost/system/letsencrypt/
-sh /var/www/ghost/system/letsencrypt/acme.sh --cron --home /var/www/ghost/system/letsencrypt/
-
 cd $GHOST_DIR
 sudo find ./ ! -path "./versions/*" -type f -exec chmod 664 {} \;
 
