@@ -14,7 +14,7 @@ module.exports = {
     interpreter: "bash",
     instances: 1,
     exec_mode: 'fork',
-    cron_restart: "*/120 * * * *",
+    cron_restart: "*/60 * * * *",
     watch: false,
     autorestart: false
   },
