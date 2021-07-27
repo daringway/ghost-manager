@@ -35,8 +35,7 @@ cat ${TEMPLATE_DIR}/config.production.json | ${GS_BIN}/mo > ${GHOST_DIR}/config.
 sudo rm /etc/nginx/sites-enabled/*
 
 sudo touch /etc/nginx/sites-available/${CMS_HOSTNAME}.conf
-cat ${TEMPLATE_DIR}/nginx-ssl | sudo ${GS_BIN}/mo > /etc/nginx/sites-available/${CMS_HOSTNAME}-ssl.conf
-sudo ln -s /etc/nginx/sites-available/${CMS_HOSTNAME}-ssl.conf /etc/nginx/sites-enabled/${CMS_HOSTNAME}-ssl.conf
+cat ${TEMPLATE_DIR}/nginx-ssl | sudo ${GS_BIN}/mo > /etc/nginx/sites-enabled/${CMS_HOSTNAME}-ssl.conf
 sudo systemctl restart nginx
 
 cd /var/www/ghost
