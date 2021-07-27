@@ -35,13 +35,5 @@ fi
 
 cd $GHOST_DIR
 sudo find ./ ! -path "./versions/*" -type f -exec chmod 664 {} \;
-# Generate config file
-
-cat ${TEMPLATE_DIR}/config.production.json | ${GS_BIN}/mo > ${GHOST_DIR}/config.production.json
-
-# Start last to make sure that the starter doesn't start before the ghost site is installed
-rm /etc/nginx/sites-enabled/*
-cat ${TEMPLATE_DIR}/nginx-ssl | ${GS_BIN}/mo > /etc/nginx/sites-enabled/nginx-ssl
-sudo systemctl restart nginx
 
 ghost restart

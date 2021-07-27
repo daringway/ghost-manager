@@ -27,6 +27,15 @@ sudo mkdir -p $GHOST_DIR/content/logs
 sudo chown -R ghost:ghost $GHOST_DIR/content/logs
 sudo find $GHOST_DIR/ ! -path "./versions/*" -type f -exec chmod 664 {} \;
 
+# Generate config file
+
+cat ${TEMPLATE_DIR}/config.production.json | ${GS_BIN}/mo > ${GHOST_DIR}/config.production.json
+
+# Start last to make sure that the starter doesn't start before the ghost site is installed
+rm /etc/nginx/sites-enabled/*
+cat ${TEMPLATE_DIR}/nginx-ssl | ${GS_BIN}/mo > ${GHOST_DIR}/system/files/${CMS_HOSTNAME}-ssl.conf
+sudo systemctl restart nginx
+
 cd /var/www/ghost
 ghost setup --no-prompt --no-start
 
