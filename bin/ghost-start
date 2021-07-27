@@ -44,4 +44,4 @@ rm /etc/nginx/sites-enabled/*
 cat ${TEMPLATE_DIR}/nginx-ssl | ${GS_BIN}/mo > /etc/nginx/sites-enabled/nginx-ssl
 sudo systemctl restart nginx
 
-ghost start
+ghost restart
