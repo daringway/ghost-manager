@@ -20,7 +20,7 @@ module.exports = {
   },
   {
     name: 'cert-renew',
-    script: "bash ./bin/ghost-cert-renew",
+    script: "./bin/ghost-cert-renew",
     interpreter: "bash",
     instances: 1,
     exec_mode: 'fork',
