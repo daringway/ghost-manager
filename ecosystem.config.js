@@ -1,26 +1,11 @@
 
 module.exports = {
   apps : [{
-    name: 'publisher',
-    script: './publisher/index.js',
-    watch: ['./publisher'],
+    name: 'backup',
+    script: './backup/index.js',
+    watch: ['./backup'],
     instances : 1,
     env : {
-    }
-  }, {
-    name: 'starter',
-    script: './starter/index.js',
-    watch: ['./starter'],
-    instances : 1,
-    env : {
-    }
-  }, {
-    name: 'stopper',
-    script: './stopper/index.js',
-    watch: ['./stopper'],
-    instances : 1,
-    env : {
-      CHECK_INTERVAL : 300
     }
   }
   ],

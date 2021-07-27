@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "async-lock": "^1.2.4"
+  }
+}
