@@ -20,6 +20,3 @@ sudo rm /etc/nginx/sites-enabled/* 2>/dev/null
 cat ${TEMPLATE_DIR}/nginx-ssl | ${GS_BIN}/mo > /tmp/${CMS_HOSTNAME}-ssl.conf
 sudo mv /tmp/${CMS_HOSTNAME}-ssl.conf /etc/nginx/sites-enabled/${CMS_HOSTNAME}-ssl.conf
 sudo systemctl restart nginx
-
-cd $GHOST_DIR
-ghost setup --no-prompt --no-nginx --no-start
