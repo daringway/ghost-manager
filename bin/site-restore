@@ -13,6 +13,8 @@ then
   aws s3 cp  $CMS_BUCKET_PREFIX/$VERSION_BACKUP_FILENAME ${BACKUP_DIR}/${VERSION_BACKUP_FILENAME}
   (cd /; tar xvf ${BACKUP_DIR}/${VERSION_BACKUP_FILENAME})
 fi
+
+[[ -x $GHOST_DIR/current ]] && rm $GHOST_DIR/current
 ln -s $GHOST_DIR/versions/$VERSION  $GHOST_DIR/current
 
 ${GS_BIN}/ghost-setup
