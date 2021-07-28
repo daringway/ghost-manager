@@ -6,7 +6,7 @@ mkdir -p $BACKUP_DIR
 
 VERSION=$(jq -r '."active-version"'  ${GHOST_DIR}/.ghost-cli)
 VERSION_BACKUP_FILENAME="version-${VERSION}.tbz2"
-if ! aws s3 ls $CMS_BUCKET_PREFIX/$VERSION_BACKUP_FILENAME || [[ "$1" == "all" ]]
+if ! aws s3 ls $CMS_BUCKET_PREFIX/$VERSION_BACKUP_FILENAME 2>/dev/null || [[ "$1" == "all" ]]
 then
   tar cvf ${BACKUP_DIR}/$VERSION_BACKUP_FILENAME ${GHOST_DIR}/versions/${VERSION}
   aws s3 cp ${BACKUP_DIR}/$VERSION_BACKUP_FILENAME $CMS_BUCKET_PREFIX/$VERSION_BACKUP_FILENAME
