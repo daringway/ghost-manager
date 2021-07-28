@@ -4,26 +4,15 @@ set -a; source $(dirname $0)/../.env; set +a
 
 mkdir -p $BACKUP_DIR
 
-# Sync the big directories, images
-aws s3 sync --delete --no-follow-symlinks $GHOST_DIR/content/images $CMS_BUCKET_PREFIX/images
-
-BACKUP_LIST=$(ls -d ${GHOST_DIR} 2>/dev/null )
-
-sudo tar cvf $BACKUP_FILE --auto-compress --exclude logs --exclude $GHOST_DIR/config.production.json --exclude $GHOST_DIR/versions --exclude $GHOST_DIR/content/images --exclude .ghostpid $BACKUP_LIST
-
-aws s3 cp $BACKUP_FILE $CMS_BUCKET_PREFIX
-
 VERSION=$(jq -r '."active-version"'  ${GHOST_DIR}/.ghost-cli)
 VERSION_BACKUP_FILENAME="version-${VERSION}.tbz2"
 if ! aws s3 ls $CMS_BUCKET_PREFIX/$VERSION_BACKUP_FILENAME || [[ "$1" == "all" ]]
 then
-  BACKUP_LIST="$BACKUP_LIST ${GHOST_DIR}/versions/${VERSION}"
   tar cvf ${BACKUP_DIR}/$VERSION_BACKUP_FILENAME ${GHOST_DIR}/versions/${VERSION}
   aws s3 cp ${BACKUP_DIR}/$VERSION_BACKUP_FILENAME $CMS_BUCKET_PREFIX/$VERSION_BACKUP_FILENAME
+  echo
+  echo "  ghost version backed up"
 fi
 
-echo "Backed Up:"
-for F in $BACKUP_LIST
-do
-  echo "  $F"
-done
+# Sync ghost data
+aws s3 sync --delete --no-follow-symlinks  $GHOST_DIR $CMS_BUCKET_PREFIX/sync --exclude 'versions/*' --exclude 'content/logs/*'

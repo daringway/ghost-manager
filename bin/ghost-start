@@ -30,6 +30,4 @@ then
 fi
 
 cd $GHOST_DIR
-sudo find ./ ! -path "./versions/*" -type f -exec chmod 664 {} \;
-
 ghost restart

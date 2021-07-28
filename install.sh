@@ -50,7 +50,7 @@ hostname $( echo $CMS_HOSTNAME | tr . - )
 
 # Want to setup the DNS record early so DNS has time to update
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
-TTL=120 # We set to 2 minutes because it takes that long for the rest of the setup
+TTL=60 # It currently takes about 2 minutes for the rest of the setup
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":'$TTL',"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
 
 echo "ghost-serverless ts $(( $(date +%s) - $START_TS )): DNS updated"

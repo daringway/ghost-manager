@@ -4,16 +4,7 @@ set -a; source $(dirname $0)/../.env; set +a
 
 mkdir -p $BACKUP_DIR
 
-if ! aws s3 ls $CMS_BUCKET_PREFIX/$BACKUP_FILENAME
-then
-  echo "No backup to restore"
-  exit 1
-fi
-
-aws s3 sync --delete --no-follow-symlinks $CMS_BUCKET_PREFIX/images $GHOST_DIR/content/images
-aws s3 cp $CMS_BUCKET_PREFIX/$BACKUP_FILENAME $BACKUP_FILE
-cd /
-sudo tar xvf $BACKUP_FILE
+aws s3 sync --no-follow-symlinks $CMS_BUCKET_PREFIX/sync $GHOST_DIR/
 
 VERSION=$(jq -r '."active-version"'  ${GHOST_DIR}/.ghost-cli)
 VERSION_BACKUP_FILENAME="version-${VERSION}.tbz2"
@@ -38,7 +29,7 @@ cat ${TEMPLATE_DIR}/nginx-ssl | ${GS_BIN}/mo > /tmp/${CMS_HOSTNAME}-ssl.conf
 sudo mv /tmp/${CMS_HOSTNAME}-ssl.conf /etc/nginx/sites-enabled/${CMS_HOSTNAME}-ssl.conf
 sudo systemctl restart nginx
 
-cd /var/www/ghost
+cd $GHOST_DIR
 ghost setup --no-prompt --no-nginx --no-start
 
 ${GS_BIN}/ghost-start
