@@ -15,4 +15,4 @@ then
 fi
 
 # Sync ghost data
-aws s3 sync --delete --no-follow-symlinks  $GHOST_DIR $CMS_BUCKET_PREFIX/sync --exclude config.production.json --exclude 'versions/*' --exclude 'content/logs/*'
+aws s3 sync --delete --no-follow-symlinks  $GHOST_DIR $CMS_BUCKET_PREFIX/sync --exclude 'config.production.json' --exclude 'versions/*' --exclude 'content/logs/*'
