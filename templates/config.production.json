@@ -31,6 +31,8 @@
     "from": "'DaringWay Support' <support@daringway.com>",
     "options": {
       "service": "Mailgun",
+      "host": "smtp.mailgun.org",
+      "port": 587,
       "auth": {
         "user": "{{SMTP_USER}}",
         "pass": "{{SMTP_PASSWORD}}"
