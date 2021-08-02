@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+$(dirname $0)/update-env
 set -a; source $(dirname $0)/../.env; set +a
 
 if [[ ! -d $GHOST_DIR/content/logs ]]

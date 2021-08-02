@@ -27,8 +27,7 @@
     }
   },
   "mail": {
-    "transport": "Direct",
-    "from": "'DaringWay Support' <support@daringway.com>",
+    "transport": "SMTP",
     "options": {
       "service": "Mailgun",
       "host": "smtp.mailgun.org",
