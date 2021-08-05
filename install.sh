@@ -2,10 +2,12 @@
 
 INSTALL_DIR=/var/www/ghost-serverless
 
+START_TS=$(date +%s)
+
 while ! aws sts get-caller-identity
 do
-  echo "Missing IAM Role or not attached , sleeping 15"
-  sleep 15
+  echo "Missing IAM Role or not attached , sleeping 5"
+  sleep 5
 done
 
 # Setup the .env
@@ -18,7 +20,6 @@ hostname $( echo $CMS_HOSTNAME | tr . - )
 IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 TTL=60 # It currently takes about 2 minutes for the rest of the setup
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$CMS_HOSTNAME'","Type":"A","TTL":'$TTL',"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
-
 
 # Setup firewall
 ufw allow 'Nginx Full'
