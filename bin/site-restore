@@ -19,7 +19,4 @@ ln -s $GHOST_DIR/versions/$VERSION  $GHOST_DIR/current
 
 ${GS_BIN}/ghost-setup
 
-cd $GHOST_DIR
-ghost setup --no-prompt --no-nginx --no-start
-
 ${GS_BIN}/ghost-start
