@@ -19,6 +19,8 @@ ln -s $GHOST_DIR/versions/$VERSION  $GHOST_DIR/current
 
 ${GS_BIN}/ghost-setup
 
+${GS_BIN}/ghost-start
+
 CURRENT_VERSION=$( ls ${GHOST_DIR}/versions  | tail -1 )
 if [[ "${CURRENT_VERSION}" != "${VERSION}" ]]
 then
@@ -29,5 +31,3 @@ then
     ghost upgrade
   fi
 fi
-
-${GS_BIN}/ghost-start
