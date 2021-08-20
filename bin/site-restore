@@ -21,13 +21,13 @@ ${GS_BIN}/ghost-setup
 
 ${GS_BIN}/ghost-start
 
-CURRENT_VERSION=$( ls ${GHOST_DIR}/versions  | tail -1 )
+CURRENT_VERSION=$( ls ${GHOST_DIR}/versions  | sort -n | tail -1 )
 if [[ "${CURRENT_VERSION}" != "${VERSION}" ]]
 then
 #  Only upgrade if on same major version
   if [[ "${CURRENT_VERSION%%.*}" == ${VERSION%%.*} ]]
   then
     cd ${GHOST_DIR}
-    ghost upgrade
+    ghost upgrade ${VERSION}
   fi
 fi
