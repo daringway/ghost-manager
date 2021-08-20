@@ -21,4 +21,5 @@ sudo mv /tmp/${CMS_HOSTNAME}-ssl.conf /etc/nginx/sites-enabled/${CMS_HOSTNAME}-s
 sudo systemctl restart nginx
 
 cd $GHOST_DIR
-ghost setup --no-prompt --no-nginx --no-start
+# We don't config nginx or mail as it's already done.
+ghost setup --no-prompt --no-nginx --no-start --no-mail
