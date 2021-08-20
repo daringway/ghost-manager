@@ -22,4 +22,4 @@ sudo systemctl restart nginx
 
 cd $GHOST_DIR
 # We don't config nginx or mail as it's already done.
-ghost setup --no-prompt --no-nginx --no-start --no-mail
+ghost setup --no-prompt --no-nginx --no-start --no-mail --no-db
